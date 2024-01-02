@@ -26,7 +26,7 @@
 
 equilibrium_init_create_stripped <- function(age_vector, het_brackets,
                                              country = NULL, admin_unit = NULL, ft,
-                                             init_EIR, model_param_list, state_check = 0)
+                                             init_EIR, model_param_list, state_check = FALSE)
 {
 
   # mpl is shorter :)
@@ -322,8 +322,8 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
 
   ##Check that equilibrium solution produces an equilibrium for
   ##the desired model
-  if(state_check==1){
-    if(mpl$seasonality_on==0){
+  if(state_check){
+    if(!mpl$seasonality_on){
       H <- sum(S_eq) + sum(T_eq) + sum(D_eq) + sum(A_eq) + sum(U_eq) + sum(P_eq)
 
       deriv_S1 <- -FOI_eq[1,]*S_eq[1,] + mpl$rP*P_eq[1,] + mpl$rU*U_eq[1,] +

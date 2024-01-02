@@ -365,7 +365,7 @@ betaa_eq <- user()
 initial(betaa_td) <- betaa_eq
 max_param <- user()
 betaa_max <- log(max_param)
-betaa_update <- if(state_check==0) min(log(betaa_td)+rnorm(0,1)*volatility,betaa_max) else log(betaa_eq)
+betaa_update <- if(state_check==FALSE) min(log(betaa_td)+rnorm(0,1)*volatility,betaa_max) else log(betaa_eq)
 update(betaa_td) <- exp(betaa_update)
 output(betaa_out) <- betaa_td
 
