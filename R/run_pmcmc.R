@@ -39,7 +39,7 @@ run_pmcmc <- function(data_raw=NULL,
                       data_raw_mg=NULL,
                       init_EIR = 10,
                       target_prev=NULL,
-                      target_prev_group='5.10',
+                      target_prev_group='u5',
                       n_particles=200,
                       proposal_matrix,
                       max_param=1000,
@@ -48,7 +48,7 @@ run_pmcmc <- function(data_raw=NULL,
                       n_threads = 4,
                       n_chains = 1,
                       n_workers = 1,
-                      state_check = FALSE,## Run equilibrium checks
+                      state_check = 0,## Run equilibrium checks
                       # If state_check = TRUE, returns expected deriv values which should equal 0 and sets stochastic model to have EIR constant at init_EIR
                       # If state_check = TRUE and seasonality_on = 1, then the deterministic seasonal model is still run, but theta2 is forced to 1, forcing a constant seasonality profile
                       # If state_check = FALSE, no values are printed
@@ -77,7 +77,6 @@ run_pmcmc <- function(data_raw=NULL,
     avg_prev <- sum(data_raw[1:12,'positive'],na.rm=TRUE)/sum(data_raw[1:12,'tested'],na.rm=TRUE)
   }
   Sys.setenv("MC_CORES"=n_threads)
-
   # ## Modify dates from data
   data_proc <- data_process(data_raw=data_raw,start_pf_time=start_pf_time,check_flexibility = check_flexibility)
   data <- data_proc$data
@@ -112,27 +111,27 @@ run_pmcmc <- function(data_raw=NULL,
                                     comparison = comparison,
                                     avg_prev = avg_prev)
 
-
   ## If a deterministic seasonal model is needed prior to the stochastic model, this loads the deterministic odin model
   det_model <- NULL
   if(seasonality_on & !is.data.frame(init_EIR)){
     odin_det <- system.file("odin", "odin_model_stripped_seasonal.R", package = "mamasante")
-    det_model <- odin::odin(odin_det)
+    det_model <- suppressMessages(odin::odin(odin_det))
   } else if(!(seasonality_on) & is.data.frame(init_EIR)){
     odin_det <- system.file("odin", "odin_model_stripped_matched.R", package = "mamasante")
-    det_model <- odin::odin(odin_det)
+    det_model <- suppressMessages(odin::odin(odin_det))
   } else if(seasonality_on & is.data.frame(init_EIR)){
     print('Seasonality not supported with multiple EIR values.')
     print('Reverting to piece-wise constant EIR.')
     odin_det <- system.file("odin", "odin_model_stripped_matched.R", package = "mamasante")
-    det_model <- odin::odin(odin_det)
+    det_model <- suppressMessages(odin::odin(odin_det))
   }
 
   ## Load stochastic model in odin.dust
   ##Switch between EIR and mosquito emergence models
   stoch_file <- 'odinmodelmatchedstoch_mozemerg.R'
   odin_stoch <- system.file("odin", stoch_file, package = "mamasante")
-  model <- odin.dust::odin_dust(odin_stoch)
+
+  model <- suppressMessages(odin.dust::odin_dust(odin_stoch))
 
   if(!model$public_methods$has_openmp()) warning('openmp must be enabled to run particle filter in parallel')
 
@@ -160,6 +159,7 @@ run_pmcmc <- function(data_raw=NULL,
                                                proposal_matrix,
                                                transform = data_informed(mpl_pf,det_model)) ## Calls transformation function based on pmcmc parameters
   }
+
 
   n_threads <- dust::dust_openmp_threads(n_threads, action = "fix")
   if(comparison=='u5'){

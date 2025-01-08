@@ -2,7 +2,7 @@
 title: "mamasante introduction"
 author: "Joseph Hicks"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: rmarkdown::github_document
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -34,13 +34,7 @@ In this simple example, we will fit our model to simulated monthly prevalence da
 
 Like so,
 
-```{r, fig.show='hold'}
-install.packages(
-  "mcstate",
-  repos = c("https://mrc-ide.r-universe.dev", "https://cloud.r-project.org"))
-install.packages(
-  "odin.dust",
-  repos = c("https://mrc-ide.r-universe.dev", "https://cloud.r-project.org"))
+```{r data, fig.show='hold',cache=TRUE}
 data_slim <- dplyr::select(mamasante::data_sim,month,positive,tested)
 data_slim
 ```
@@ -55,28 +49,80 @@ The `run_pmcmc` function is the central tool to fit our model to observed data. 
 4.  Run the pMCMC.
 5.  Format output.
 
-```{r, fig.show='hold'}
+```{r pmcmc, fig.show='hold',  dependson="data"}
 result <- mamasante::run_pmcmc(data_raw=data_slim,
-                       n_particles=200,
+                       n_particles=50,
                        proposal_matrix = matrix(1),
                        target_prev = 0.4,
                        target_prev_group = 'u5',
                        max_param=125,
                        prop_treated = 0.4,
-                       n_steps = 100,
+                       n_steps = 10,
                        seed = 1L,
                        start_pf_time = 30*12,
                        comparison = 'u5',
-                       initial = 'informed')
+                       initial = 'informed',
+                       state_check = 0)
 ```
 
-## Figures
+## Visualising output
 
 The figure sizes have been customised so that you can easily put two images side-by-side.
 
 ```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+library(dplyr)
+measure_names <- c('prev_05','clininc_all','EIR','betaa')
+months <- data_slim$month
+
+timelength <- length(months)
+num_months <- length(result$history[1,1,])
+start_month_index <- (num_months-timelength+1)
+
+  mcmc <- result$mcmc[,]
+  ar <- 1 - coda::rejectionRate(coda::as.mcmc(mcmc))
+  ess <- coda::effectiveSize(coda::as.mcmc(mcmc))
+  pars_list <- names(mcmc)
+
+history.dfs <- lapply(measure_names,function(x){
+  as.data.frame(t(result$history[x,,start_month_index:num_months]))%>%
+        dplyr::mutate(month=months)%>%
+    reshape2::melt(id='month')%>%
+    dplyr::group_by(month)%>%
+    dplyr::summarise(median=median(value),
+              upper=quantile(value,probs=0.975),
+              lower=quantile(value,probs=0.025))%>%
+    dplyr::mutate(measure=x)
+})
+names(history.dfs) <- measure_names
+
+library('ggplot2')
+
+ggplot(data=history.dfs[['prev_05']])+
+  geom_ribbon(aes(x=month,ymin=lower,ymax=upper),fill='lightblue')+
+  geom_line(aes(x=month,y=median),color='darkblue')+
+  geom_point(data=data_slim,aes(x=month,y=positive/tested),fill='black')+
+  theme_minimal()
+
+ggplot(data=history.dfs[['clininc_all']])+
+  geom_ribbon(aes(x=month,ymin=lower,ymax=upper),fill='lightblue')+
+  geom_line(aes(x=month,y=median),color='darkblue')+
+  facet_grid(.~measure)+
+  theme_minimal()
+
+ggplot(data=history.dfs[['EIR']])+
+  geom_ribbon(aes(x=month,ymin=lower,ymax=upper),fill='lightblue')+
+  geom_line(aes(x=month,y=median),color='darkblue')+
+  facet_grid(.~measure)+
+  scale_y_log10()+
+  theme_minimal()
+
+ggplot(data=history.dfs[['betaa']])+
+  geom_ribbon(aes(x=month,ymin=lower,ymax=upper),fill='lightblue')+
+  geom_line(aes(x=month,y=median),color='darkblue')+
+  facet_grid(.~measure)+
+  scale_y_log10()+
+  theme_minimal()
+
 ```
 
 You can enable figure captions by `fig_caption: yes` in YAML:

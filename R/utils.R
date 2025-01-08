@@ -423,15 +423,18 @@ initialise <- function(init_EIR,mpl,det_model){
     # print(EIR_vals)
     # cat('New initial EIR: ',init_EIR,'\n')
   }
-  if(!is.null(mpl$target_prev)&mpl$target_prev_group!='u5'){
-    print('Optimizing initial EIR based on target prevalence in 2 to 10 year olds.')
-    opt_EIR <- stats::optim(1,fn=mamasante::get_init_EIR,mpl=mpl,method='Brent',lower=0,upper=2000)
-    init_EIR <- opt_EIR$par
-  }else if(!is.null(mpl$target_prev)&mpl$target_prev_group=='u5'){
-    print('Optimizing initial EIR based on target prevalence in under 5 year olds.')
-    opt_EIR <- stats::optim(1,fn=mamasante::get_init_EIR_u5,mpl=mpl,method='Brent',lower=0,upper=2000)
+  if(!is.null(mpl$target_prev)){
+    message('Optimizing initial EIR based on target prevalence.')
+    opt_EIR <- suppressMessages(stats::optim(1,fn=mamasante::get_init_EIR,mpl=mpl,method='Brent',lower=0,upper=2000))
     init_EIR <- opt_EIR$par
   }
+  # else if(!is.null(mpl$target_prev)&mpl$target_prev_group=='u5'){
+  #   message('Optimizing initial EIR based on target prevalence in under 5 year olds.')
+  #   opt_EIR <- suppressMessages(stats::optim(1,fn=mamasante::get_init_EIR_u5,mpl=mpl,age_group='u5',method='Brent',lower=0,upper=2000))
+  #   init_EIR <- opt_EIR$par
+  # }
+  message(paste0('Initial EIR set to ',round(init_EIR,digits=1),'.'))
+
   ## Run equilibrium function
   state <- equilibrium_init_create_stripped(init_EIR = init_EIR,
                                             model_param_list = mpl,
@@ -741,14 +744,15 @@ get_odds_from_prev<-function(prev){
 #' @export
 get_init_EIR <- function(par,mpl){
   init_EIR <- par[1]
-  print(init_EIR)
   equil <- mamasante::equilibrium_init_create_stripped(age_vector = mpl$init_age,
                                                     ft = mpl$prop_treated,
                                                     het_brackets = mpl$het_brackets,
                                                     init_EIR = init_EIR,
                                                     model_param_list = mpl)
+  prev_age <- ifelse(mpl$target_prev_group =='u5','prev05','prev2.10')
 
-  return((equil$prev2.10 - mpl$target_prev)^2)
+
+  return((equil[[prev_age]] - mpl$target_prev)^2)
 }
 #' Return an initial EIR based on a user-given target prevalence in <5 yead old children
 #'
@@ -760,7 +764,6 @@ get_init_EIR <- function(par,mpl){
 #' @export
 get_init_EIR_u5 <- function(par,mpl){
   init_EIR <- par[1]
-  print(init_EIR)
   equil <- mamasante::equilibrium_init_create_stripped(age_vector = mpl$init_age,
                                                     ft = mpl$prop_treated,
                                                     het_brackets = mpl$het_brackets,
