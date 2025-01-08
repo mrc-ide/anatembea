@@ -9,7 +9,7 @@ output: rmarkdown::github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "./mamasante.wiki/images/"
+  fig.path = "images/"
 )
 ```
 
@@ -64,7 +64,7 @@ We can then visualise how well the pMCMC fit to the prevalence data, as well as
 unobserved transmission metrics like clinical incidence in the entire population
 and the entomological inoculation rate (EIR).
 
-```{r output_process, echo = FALSE}
+```{r output_process, echo = FALSE, message = FALSE}
 library(dplyr)
 measure_names <- c('prev_05','clininc_all','EIR','betaa')
 months <- data_slim$month
@@ -98,21 +98,24 @@ prev_plot <- ggplot(data=history.dfs[['prev_05']])+
   geom_point(data=data_slim,aes(x=month,y=positive/tested),fill='black')+
   scale_y_continuous(limits=c(0,0.5),expand=c(0,0))+
   labs(y='RDT Prevalence,\nChildren < 5 years')+
-  theme_minimal()
+  theme_minimal()+
+  theme(axis.title.x = element_blank())
 
 inc_plot <- ggplot(data=history.dfs[['clininc_all']])+
   geom_ribbon(aes(x=month,ymin=lower,ymax=upper),fill="#B2DF8A")+
   geom_line(aes(x=month,y=median),color="#33A02C")+
   scale_y_continuous(limits=c(0,NA),expand=c(0,0))+
   labs(y='Clinical Incidence,\nall ages')+
-  theme_minimal()
+  theme_minimal()+
+  theme(axis.title.x = element_blank())
 
 eir_plot <- ggplot(data=history.dfs[['EIR']])+
   geom_ribbon(aes(x=month,ymin=lower,ymax=upper),fill="#FB9A99")+
   geom_line(aes(x=month,y=median),color="#E31A1C")+
   scale_y_log10(expand=c(0,0))+
   labs(y='EIR')+
-  theme_minimal()
+  theme_minimal()+
+  theme(axis.title.x = element_blank())
 
 library(patchwork)
 library(cowplot)
