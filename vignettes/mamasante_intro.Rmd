@@ -9,7 +9,7 @@ output: rmarkdown::github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "Q:/mamasante/mamasante.wiki/images/"
+  fig.path = "./mamasante.wiki/images/"
 )
 ```
 
@@ -115,7 +115,9 @@ eir_plot <- ggplot(data=history.dfs[['EIR']])+
   theme_minimal()
 
 library(patchwork)
-combined_ggplot <- prev_plot+inc_plot+eir_plot+plot_layout(ncol=1)
+library(cowplot)
+combined_ggplot <- cowplot::plot_grid(prev_plot,inc_plot,eir_plot,ncol=1)
+# combined_ggplot <- prev_plot+inc_plot+eir_plot+plot_layout(ncol=1)
 result$output <- combined_ggplot
 
 ```
