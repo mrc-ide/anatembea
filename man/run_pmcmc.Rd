@@ -10,25 +10,25 @@ run_pmcmc(
   data_raw_mg = NULL,
   init_EIR = 10,
   target_prev = NULL,
-  target_prev_group = "5.10",
+  target_prev_group = "u5",
   n_particles = 200,
-  proposal_matrix,
-  max_param = 1000,
+  proposal_matrix = matrix(1),
+  max_param = 125,
   prop_treated = 0.4,
   n_steps = 500,
   n_threads = 4,
   n_chains = 1,
   n_workers = 1,
-  state_check = FALSE,
+  state_check = 0,
   country = NULL,
   admin_unit = NULL,
   seasonality_on = TRUE,
   seasonality_check = FALSE,
   check_flexibility = FALSE,
   seed = 1L,
-  start_pf_time = 30,
+  start_pf_time = 30 * 12,
   particle_tune = FALSE,
-  comparison = c("u5", "pg", "pgmg", "pgsg", "ancall"),
+  comparison = "u5",
   initial = "informed"
 )
 }
@@ -81,7 +81,7 @@ If state_check = FALSE, no values are printed}
 \item{comparison}{The comparison function to be used. Either 'u5' which
 equates the observed prevalence to prevalence under 5 years old in
 the model or 'pgmg' which calculates prevalence in primigravid and
-multigravid pregnant women for comparison with observed ANC data.}
+multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')}
 
 \item{initial}{Is the initial equilibrium state informed by the user ('user-informed') or by the observed data ('fitted')?}
 

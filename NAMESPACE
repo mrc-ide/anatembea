@@ -3,6 +3,7 @@
 export(admin_match)
 export(check_seasonality)
 export(compare_ancall)
+export(compare_mg)
 export(compare_pg)
 export(compare_pgmg)
 export(compare_u5)

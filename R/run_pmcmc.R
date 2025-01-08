@@ -32,7 +32,7 @@
 #' @param comparison The comparison function to be used. Either 'u5' which
 #'          equates the observed prevalence to prevalence under 5 years old in
 #'          the model or 'pgmg' which calculates prevalence in primigravid and
-#'          multigravid pregnant women for comparison with observed ANC data.
+#'          multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')
 #' @export
 run_pmcmc <- function(data_raw=NULL,
                       data_raw_pg=NULL,
@@ -41,8 +41,8 @@ run_pmcmc <- function(data_raw=NULL,
                       target_prev=NULL,
                       target_prev_group='u5',
                       n_particles=200,
-                      proposal_matrix,
-                      max_param=1000,
+                      proposal_matrix=matrix(1),
+                      max_param=125,
                       prop_treated = 0.4,
                       n_steps = 500,
                       n_threads = 4,
@@ -59,9 +59,9 @@ run_pmcmc <- function(data_raw=NULL,
                       seasonality_check = FALSE,##If TRUE, saves values of seasonality equilibrium
                       check_flexibility = FALSE,
                       seed = 1L,
-                      start_pf_time = 30,
+                      start_pf_time = 30*12,
                       particle_tune = FALSE,
-                      comparison = c('u5','pg','sg','mg','pgmg','pgsg','ancall'),
+                      comparison = 'u5',
                       initial = 'informed'){
   ##Merge primigrav and multigrav datasets if necessary.
   if(comparison=='pgmg' | comparison=='pgsg'){
