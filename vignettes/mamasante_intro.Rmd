@@ -9,7 +9,7 @@ output: rmarkdown::github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  output_dir = "Q:/mamasante/mamasante.wiki",
+  output_dir = "Q:/mamasante/mamasante.wiki/",
   fig.path = "Q:/mamasante/mamasante.wiki/images/"
 )
 ```
