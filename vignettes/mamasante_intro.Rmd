@@ -53,9 +53,9 @@ The `run_pmcmc` function is the central tool to fit our model to observed data. 
 
 ```{r pmcmc, fig.show='hold',  dependson="data"}
 result <- mamasante::run_pmcmc(data_raw=data_slim,
-                       n_particles=50,
+                       n_particles=100,
                        target_prev = 0.4,
-                       n_steps = 10)
+                       n_steps = 500)
 ```
 
 ## Visualising output
