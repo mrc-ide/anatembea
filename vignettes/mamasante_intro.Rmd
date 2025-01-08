@@ -61,7 +61,9 @@ result <- mamasante::run_pmcmc(data_raw=data_slim,
 
 ## Visualising output
 
-The figure sizes have been customised so that you can easily put two images side-by-side.
+We can then visualise how well the pMCMC fit to the prevalence data, as well as 
+unobserved transmission metrics like clinical incidence in the entire population
+and the entomological inoculation rate (EIR).
 
 ```{r output_process, echo = FALSE}
 library(dplyr)
