@@ -30,7 +30,7 @@ In this example we will use a simulation where patterns of mosquito emergence ar
 
 The resulting relationship between malaria prevalence, clinical incidence, and entomological inoculation rate (EIR) in Tanga, Tanzania can be seen below:
 
-```{r, echo = FALSE, message = FALSE}
+```{r, echo = FALSE, message = FALSE, warning=FALSE}
 library(dplyr)
 library(ggplot2)
 data_true <- mamasante::sim_data_tanzania%>%
@@ -60,9 +60,11 @@ eir_plot_true <- ggplot(data=data_true)+
 library(cowplot)
 combined_ggplot_true <- cowplot::plot_grid(prev_plot_true,inc_plot_true,eir_plot_true,ncol=1)
 # combined_ggplot <- prev_plot+inc_plot+eir_plot+plot_layout(ncol=1)
+
+
+```
+```{r}
 combined_ggplot_true
-
-
 ```
 
 
