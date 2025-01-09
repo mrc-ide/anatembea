@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
 
 In this vignette, we demonstrate how to use MAMASANTE to reconstruct patterns of transmission intensity, seasonality, and malaria burden in settings where women are screened for malaria (using either rapid diagnostic tests or slide microscopy) with data available at a monthly cadence. Later vignettes will explore scenarios involving different data cadences or stratifications (e.g., by gravidity).
 
-MAMASANTE is a tool designed to integrate Dust, Odin, and MCState frameworks for fitting a semi-stochastic mechanistic disease transmission model to continuously collected prevalence data using particle Markov chain Monte Carlo (pMCMC). This package specifically fits a semi-stochastic version of the ‘malariasimulation’ model to monthly malaria prevalence among pregnant women at their first antenatal care (ANC1) visit. This vignette walks through a simple example and outlines various configurable options and settings.
+## Understanding our approach
 
-## Understanding
+MAMASANTE is a tool designed to integrate Dust, Odin, and MCState frameworks for fitting a semi-stochastic mechanistic disease transmission model to continuously collected prevalence data using particle Markov chain Monte Carlo (pMCMC). This package specifically fits a semi-stochastic version of the ‘malariasimulation’ model to monthly malaria prevalence among pregnant women at their first antenatal care (ANC1) visit. This vignette walks through a simple example and outlines various configurable options and settings.
 
 In the deterministic version of ‘malariasimulation’, seasonal variation in malaria transmission intensity is governed by a Fourier series, with coefficients pre-estimated from historical rainfall data. While this method provides reasonable seasonal profiles for fitting cross-sectional data collected at multi-year intervals (such as data from Demographic Health Surveys or Malaria Indicator Surveys), it lacks the flexibility required for fitting models to monthly prevalence data collected through ANC1.
 
