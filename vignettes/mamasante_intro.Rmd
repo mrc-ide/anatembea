@@ -1,6 +1,5 @@
 ---
-title: "mamasante introduction"
-author: "Joseph Hicks"
+title: "Inferring dynamics of malaria transmission and burden from malaria prevalence at first antenatal visit"
 date: "`r Sys.Date()`"
 output: rmarkdown::github_document
 ---
@@ -13,6 +12,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+In this vignette we will show you how to use mamasante to reconstruct patterns of transmission intensity, seasonality and burden within a setting where women are screened for malaria (using a rapid diagnostic test or by slide microscopy) and this data - number positive and number screened - is available at a monthly cadence (see later vignettes for settings where difference cadences or data can be stratified (e.g. by gravidity)).
+
 mamasante is a tool for applying Dust, Odin, and MCState to fit a semi-stochastic mechanistic disease transmission model to continuously collected prevalence data using particle Markov chain Monte Carlo (pMCMC). Specifically, this package has been developed to fit a semi-stochastic version of 'malariasimulation' to monthly malaria prevalence among pregnant women at first antenatal care (ANC) visit. This vignette walks through a simple example and describes various options and settings that can be applied.
 
 ## Understanding
@@ -21,24 +22,69 @@ In the deterministic version of 'malariasimulation,' seasonal variation in malar
 
 To provide more flexibility, we have replaced this seasonal mechanism with a stochastic process, in which the emergence rate of adult mosquitoes from pupae varies in a random-walk. Each month, the change in mosquito emergence rate is determined by a normally distributed random variable, *δ*, and a volatility constant, *σ*. To ensure *β* values remains realistic, the upper limit of the random walk was restricted to *β_max*. The pMCMC then filters likely trajectories of the emergence rate by comparing observed prevalence with that estimated by the model, given the emergence rate trend. The output provides a posterior distribution of likely model trajectories. Because the relationship between mosquito emergence rate and infection prevalence is defined by a mechanistic model, we can extract trends in other relevant indicators, such as the entomological inoculation rate (EIR) or clinical incidence, which are difficult to observe directly.
 
+## Generating a test dataset
+
+At it's core our approach uses the estimated relationships between temporal dynamics of infection prevalence, transmission and clinical burden underpinning the model behind malariasimulation. As a result, we can use simulations from this model to verify that our inferential framework is working as it should. In the package we provide outputs from this model parameterised using four canonical seasonality patterns, we can then fit mamasante to the infection prevalence observed within these datasets to verify that our approach can recapture these seasonal dynamics without providing it with any information as to the parameters used to generate the simulation.
+
+In this example we will use a simulation where patterns of mosquito emergence are driven by rainfall patterns observed in Tanga, Tanzania. Here rainfall follows a characteristic 'bimodal' rainfall pattern with a short season in March-May, a longer season November-January, with a dry season between May-October. Such bimodality typically represents a challenging inferential task for many algorithms attempting to infer seasonality.
+
+The resulting relationship between malaria prevalence, clinical incidence, and entomological inoculation rate (EIR) in Tanga, Tanzania can be seen below:
+
+```{r, echo = FALSE, message = FALSE}
+library(dplyr)
+library(ggplot2)
+data_true <- mamasante::sim_data_tanzania%>%
+  dplyr::filter(month<=zoo::as.yearmon('Dec 2019'))
+
+prev_plot_true <- ggplot(data=data_true)+
+  geom_line(aes(x=month,y=prev_05_true),fill="#1F78B4")+
+  scale_y_continuous(limits=c(0,0.5),expand=c(0,0))+
+  labs(y='RDT Prevalence,\nChildren < 5 years')+
+  theme_minimal()+
+  theme(axis.title.x = element_blank())
+
+inc_plot_true <- ggplot(data=data_true)+
+  geom_line(aes(x=month,y=clininc_all_true),color="#33A02C")+
+  scale_y_continuous(limits=c(0,NA),expand=c(0,0))+
+  labs(y='Clinical Incidence,\nall ages')+
+  theme_minimal()+
+  theme(axis.title.x = element_blank())
+
+eir_plot_true <- ggplot(data=data_true)+
+  geom_line(aes(x=month,y=EIR_true),color="#E31A1C")+
+  scale_y_log10(expand=c(0,0))+
+  labs(y='EIR')+
+  theme_minimal()+
+  theme(axis.title.x = element_blank())
+
+library(cowplot)
+combined_ggplot_true <- cowplot::plot_grid(prev_plot_true,inc_plot_true,eir_plot_true,ncol=1)
+# combined_ggplot <- prev_plot+inc_plot+eir_plot+plot_layout(ncol=1)
+combined_ggplot_true
+
+
+```
+
+
 ## Input Data
 
-In this simple example, we will fit our model to simulated monthly prevalence data in children under 5 years old. Data for fitting should be a data frame with at least three columns:
+Data for fitting should be a data frame with at least three columns:
 
 1.  `month`: Month (here formatted as 'yearmon', provided by the package 'zoo')
 2.  `tested`:The number of individuals tested
 3.  `positive`: Of those tested, the number of positive test results
 
-Like so,
+In our example "tanga_data_slim" samples in the correct format have been generated by sampling binomially from infection prevalence from the simulation presented above.
+
 ```{r data, echo = FALSE,cache=TRUE}
 library(dplyr)
-data_slim <- mamasante::sim_data_tanzania%>%
+tanga_data_slim <- mamasante::sim_data_tanzania%>%
   dplyr::select(month,positive,tested)%>%
   dplyr::filter(month<=zoo::as.yearmon('Dec 2019'))
 ```
 
 ```{r, fig.show='hold'}
-head(data_slim, 5)
+head(tanga_data_slim, 5)
 ```
 
 ## Running a pMCMC fitting
@@ -52,10 +98,10 @@ The `run_pmcmc` function is the central tool to fit our model to observed data. 
 5.  Format output.
 
 ```{r pmcmc, fig.show='hold',  dependson="data"}
-result <- mamasante::run_pmcmc(data_raw=data_slim,
+result <- mamasante::run_pmcmc(data_raw=tanga_data_slim,
                        n_particles=100,
                        target_prev = 0.4,
-                       n_steps = 500)
+                       n_steps = 10)
 ```
 
 ## Visualising output
@@ -67,7 +113,7 @@ and the entomological inoculation rate (EIR).
 ```{r output_process, echo = FALSE, message = FALSE}
 library(dplyr)
 measure_names <- c('prev_05','clininc_all','EIR','betaa')
-months <- data_slim$month
+months <- tanga_data_slim$month
 
 timelength <- length(months)
 num_months <- length(result$history[1,1,])
@@ -95,7 +141,7 @@ library('ggplot2')
 prev_plot <- ggplot(data=history.dfs[['prev_05']])+
   geom_ribbon(aes(x=month,ymin=lower,ymax=upper),fill="#A6CEE3")+
   geom_line(aes(x=month,y=median),color="#1F78B4")+
-  geom_point(data=data_slim,aes(x=month,y=positive/tested),fill='black')+
+  geom_point(data=tanga_data_slim,aes(x=month,y=positive/tested),fill='black')+
   scale_y_continuous(limits=c(0,0.5),expand=c(0,0))+
   labs(y='RDT Prevalence,\nChildren < 5 years')+
   theme_minimal()+
