@@ -37,7 +37,7 @@ data_true <- mamasante::sim_data_tanzania%>%
   dplyr::filter(month<=zoo::as.yearmon('Dec 2019'))
 
 prev_plot_true <- ggplot(data=data_true)+
-  geom_line(aes(x=month,y=prev_05_true),fill="#1F78B4")+
+  geom_line(aes(x=month,y=prev_05_true),color="#1F78B4")+
   scale_y_continuous(limits=c(0,0.5),expand=c(0,0))+
   labs(y='RDT Prevalence,\nChildren < 5 years')+
   theme_minimal()+
