@@ -131,7 +131,7 @@ run_pmcmc <- function(data_raw=NULL,
   stoch_file <- 'odinmodelmatchedstoch_mozemerg.R'
   odin_stoch <- system.file("odin", stoch_file, package = "mamasante")
 
-  model <- suppressMessages(odin.dust::odin_dust(odin_stoch))
+  model <- odin.dust::odin_dust(odin_stoch,verbose = FALSE)
 
   if(!model$public_methods$has_openmp()) warning('openmp must be enabled to run particle filter in parallel')
 
