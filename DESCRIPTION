@@ -23,6 +23,10 @@ Imports:
     statmod,
     stringi,
     dde
+Remotes:
+    mrc-ide/dust,
+    mrc-ide/odin.dust,
+    mrc-ide/mcstate,
 Depends: 
     R (>= 3.5)
 LazyData: true
