@@ -2,6 +2,7 @@
 # mamasante
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/jt-hicks/mamasante/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jt-hicks/mamasante/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of mamasante is to ...
