@@ -22,7 +22,8 @@ Imports:
     dplyr,
     statmod,
     stringi,
-    dde
+    dde,
+    RecordLinkage
 Remotes:
     mrc-ide/dust,
     mrc-ide/odin.dust,
