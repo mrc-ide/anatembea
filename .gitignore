@@ -8,3 +8,4 @@ seasonal_equil_values.RDS
 test_script.R
 plot_particle_filter.R
 random_walk_explore.R
+docs
