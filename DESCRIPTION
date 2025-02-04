@@ -24,7 +24,9 @@ Imports:
     stringi,
     dde,
     RecordLinkage,
-    ggplot2
+    ggplot2,
+    cowplot,
+    reshape2
 Remotes:
     mrc-ide/dust,
     mrc-ide/odin.dust,
