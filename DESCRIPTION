@@ -23,7 +23,8 @@ Imports:
     statmod,
     stringi,
     dde,
-    RecordLinkage
+    RecordLinkage,
+    ggplot2
 Remotes:
     mrc-ide/dust,
     mrc-ide/odin.dust,
