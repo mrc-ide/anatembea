@@ -1,7 +1,11 @@
 ---
 title: "Using MAMASANTE to Reconstruct Transmission Patterns: A Vignette"
 date: "`r Sys.Date()`"
-output: rmarkdown::github_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using MAMASANTE to Reconstruct Transmission Patterns: A Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
