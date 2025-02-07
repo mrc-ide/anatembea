@@ -22,6 +22,7 @@ load_file <- function(name) {
 
   # get full file path
   name_full <- system.file("extdata/", name, package="mamasante", mustWork = TRUE)
+  message(name_full)
 
   # read in file
   if (ext == "rds" | ext == "RDS") {
