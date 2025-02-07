@@ -281,7 +281,7 @@ model_param_list_create <- function(
   if(!is.null(country)) country <- stringi::stri_trans_general(country,"Latin-ASCII")
   if(!is.null(admin_unit)) admin_unit <- stringi::stri_trans_general(admin_unit, "Latin-ASCII")
 
-  admin_units_seasonal <- load_file("admin_units_seasonal.rds")
+  # admin_units_seasonal <- load_file("admin_units_seasonal.rds")
   admin_matches <- admin_match(admin_unit = admin_unit, country = country,
                                admin_units_seasonal = admin_units_seasonal)
 
@@ -299,8 +299,8 @@ model_param_list_create <- function(
   }
 
   ## Gravidity prevalence conversion coefficients:
-  coefs_pgsgmg_df <- apply(load_file('pgsgmg_corr_sample.rds'),2,median)
-  coefs_all_df <- apply(load_file('all_corr_sample.RDS'),2,median)
+  coefs_pgsgmg_df <- apply(pgsgmg_corr_sample,2,median)
+  coefs_all_df <- apply(all_corr_sample,2,median)
 
   av_lo_child <- coefs_pgsgmg_df[['av_lo_child']]
   gradient_pg <- coefs_pgsgmg_df[['gradient_pg']]
