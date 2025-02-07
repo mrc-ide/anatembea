@@ -1,0 +1,6 @@
+pandoc: 3.1.11
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  mamasante_intro: mamasante_intro.html
+last_built: 2025-02-07T16:07Z
