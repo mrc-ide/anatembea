@@ -3,6 +3,8 @@
 #' This function sets up and runs a particle MCMC that uses Dust, Odin and MCState
 #'
 #' @param data_raw Time series data to fit model
+#' @param data_raw_pg Time series of primigravidae ANC data to fit model
+#' @param data_raw_mg Time series of multigravidae ANC data to fit model
 #' @param n_particles Number of particles to be used in pMCMC (default = 200)
 #' @param proposal_matrix Proposal matrix for MCMC parameters
 #' @param max_param Ceiling for proposed stochastic parameter (either EIR or betaa) values (default = 1000)
@@ -22,6 +24,11 @@
 #' @param seasonality_check Toggle saving values of seasonality equilibrium (default = 1)
 #' @param seed Allows user to specify a seed (default = 1L)
 #' @param start_pf_time Number of days before first observation that particle filter will start (default = 30)
+#' @param comparison The comparison function to be used. Either 'u5' which
+#'          equates the observed prevalence to prevalence under 5 years old in
+#'          the model or 'pgmg' which calculates prevalence in primigravid and
+#'          multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')
+#' @param stoch_param Which parameter to test
 
 #' @export
 test_pf <- function(data_raw=NULL,

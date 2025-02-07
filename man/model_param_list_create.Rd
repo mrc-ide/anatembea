@@ -199,6 +199,10 @@ model_param_list_create(
 
 \item{DY}{Duration of year (days). Default = 365}
 
+\item{country}{Country for seasonality profile}
+
+\item{admin_unit}{Admin for seasonality profile}
+
 \item{comparison}{Comparison group used to calculate likelihood}
 
 \item{avg_prev}{Average prevalence during first year of data collection}
@@ -208,26 +212,6 @@ as any of the defined parameters \code{model_param_list_create} will stop. You c
 any extra parameters you like individually, e.g. model_param_list_create(extra1 = 1, extra2 = 2)
 and these parameteres will appear appended to the returned list, or you can pass explicitly
 the ellipsis argument as a list created before, e.g. model_param_list_create(...=list(extra1 = 1, extra2 = 2))}
-
-\item{ITN_IRS_on}{Time of ITN and IRS to be activated. Default = -1, i.e. never.}
-
-\item{d_ITN0}{Probability of dying with an encounter with ITN (max). Default = 0.41}
-
-\item{r_ITN0}{Probability of repeating behaviour with ITN (max). Default = 0.56}
-
-\item{r_ITN1}{Probability of repeating behaviour with ITN (min). Default = 0.24}
-
-\item{r_IRS0}{Probability of repeating behaviour with IRS (min). Default = 0.6}
-
-\item{d_IRS0}{Probability of dying with an encounter with IRS (max). Default = 1}
-
-\item{irs_half_life}{IRS half life. Default =   0.5 * DY}
-
-\item{itn_half_life}{ITN half life. Default =   2.64 * DY}
-
-\item{IRS_interval}{How long before IRS is repeated, i.e. when IRS decay = 1. Default =   1 * DY}
-
-\item{ITN_interval}{How long before ITN is repeated, i.e. when IRS decay = 1.  Default =   3 * DY}
 }
 \description{
 \code{model_param_list_create} creates list of model parameters to be used

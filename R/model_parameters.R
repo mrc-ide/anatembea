@@ -64,19 +64,11 @@
 #' @param num_int Number of intervention parameters.  Default = 4
 #' @param itn_cov The proportion of people that use an ITN. Default = 0
 #' @param irs_cov The proportion of people living in houses that have been sprayed. Default = 0
-#' @param ITN_IRS_on Time of ITN and IRS to be activated. Default = -1, i.e. never.
 #' @param DY Duration of year (days). Default = 365
-#' @param d_ITN0 Probability of dying with an encounter with ITN (max). Default = 0.41
-#' @param r_ITN0 Probability of repeating behaviour with ITN (max). Default = 0.56
-#' @param r_ITN1 Probability of repeating behaviour with ITN (min). Default = 0.24
-#' @param r_IRS0 Probability of repeating behaviour with IRS (min). Default = 0.6
-#' @param d_IRS0 Probability of dying with an encounter with IRS (max). Default = 1
-#' @param irs_half_life IRS half life. Default =   0.5 * DY
-#' @param itn_half_life ITN half life. Default =   2.64 * DY
-#' @param IRS_interval How long before IRS is repeated, i.e. when IRS decay = 1. Default =   1 * DY
-#' @param ITN_interval How long before ITN is repeated, i.e. when IRS decay = 1.  Default =   3 * DY
 #' @param avg_prev Average prevalence during first year of data collection
 #' @param comparison Comparison group used to calculate likelihood
+#' @param country Country for seasonality profile
+#' @param admin_unit Admin for seasonality profile
 #' @param ... Any other parameters needed for non-standard model. If they share the same name
 #' as any of the defined parameters \code{model_param_list_create} will stop. You can either write
 #' any extra parameters you like individually, e.g. model_param_list_create(extra1 = 1, extra2 = 2)

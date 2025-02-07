@@ -11,6 +11,8 @@ data_process(data_raw = NULL, start_pf_time = NULL, check_flexibility)
 Default = NULL}
 
 \item{start_pf_time}{Amount of time before first observation to start particle filter}
+
+\item{check_flexibility}{Save pre-observation run}
 }
 \description{
 \code{data_process} Transform data file

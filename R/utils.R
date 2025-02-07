@@ -147,6 +147,7 @@ format_na <- function(df){
 #' @param data_raw Data input from user
 #'   Default = NULL
 #'@param start_pf_time Amount of time before first observation to start particle filter
+#'@param check_flexibility Save pre-observation run
 #' @export
 
 data_process <- function(data_raw = NULL, start_pf_time = NULL, check_flexibility){
@@ -536,9 +537,7 @@ initialise <- function(init_EIR,mpl,det_model){
 #'    then optionally runs a deterministic seasonal model and returns initial
 #'    values to be used for the stochastic model fitting.
 #'
-#' @param mpl Model parameter list. Default = NULL
-#' @param season_model Seasonality model to be used for the optional deterministic
-#'    model. Default = NULL
+#' @param init_state Initial state
 #'
 #' @export
 user_informed <- function(init_state){ ## Wraps transformation function in a 'closure' environment so you can pass other parameters that you aren't fitting with the pMCMC
@@ -565,7 +564,7 @@ user_informed <- function(init_state){ ## Wraps transformation function in a 'cl
 #'    then optionally runs a deterministic seasonal model and returns initial
 #'    values to be used for the stochastic model fitting.
 #'
-#' @param mpl Model parameter list. Default = NULL
+#' @param mpl_pf Model parameter list. Default = NULL
 #' @param season_model Seasonality model to be used for the optional deterministic
 #'    model. Default = NULL
 #'

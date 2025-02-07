@@ -7,10 +7,10 @@
 data_informed(mpl_pf, season_model)
 }
 \arguments{
+\item{mpl_pf}{Model parameter list. Default = NULL}
+
 \item{season_model}{Seasonality model to be used for the optional deterministic
 model. Default = NULL}
-
-\item{mpl}{Model parameter list. Default = NULL}
 }
 \description{
 \code{data_informed} Calculates the model equilibrium based on an initial EIR values,

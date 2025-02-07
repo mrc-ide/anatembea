@@ -35,6 +35,10 @@ and admin_unit are NULL then no seasonality is assumed. Default = NULL.}
 \item{init_EIR}{Numeric for desired annual EIR.}
 
 \item{model_param_list}{List of epidemiological parameters created by}
+
+\item{state_check}{If state_check = TRUE, returns expected deriv values which should equal 0 and sets stochastic model to have EIR constant at init_EIR
+If state_check = TRUE and seasonality_on = 1, then the deterministic seasonal model is still run, but theta2 is forced to 1, forcing a constant seasonality profile
+If state_check = FALSE, no values are printed}
 }
 \description{
 \code{equilibrium_init_create_stripped} creates an equilibrium initialisation state to be

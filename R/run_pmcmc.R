@@ -3,12 +3,15 @@
 #' This function sets up and runs a particle MCMC that uses Dust, Odin and MCState
 #'
 #' @param data_raw Time series data to fit model
+#' @param data_raw_pg Time series of primigravidae ANC data to fit model
+#' @param data_raw_mg Time series of multigravidae ANC data to fit model
 #' @param n_particles Number of particles to be used in pMCMC (default = 200)
 #' @param init_EIR A single value or a dataframe with two columns (time and EIR)
 #'                  to specify historical malaria transmission levels before
 #'                  data collection began.
 #' @param target_prev Return an initial EIR value (from the equilibrium solution),
 #'                    given a target prevalence in under 5yos
+#' @param target_prev_group Age group used for target prevalence
 #' @param proposal_matrix Proposal matrix for MCMC parameters
 #' @param max_param Ceiling for proposed stochastic parameter (either EIR or betaa) values (default = 1000)
 #' @param prop_treated Proportion of clinical cases that receive effective treatment (default = 40%)
@@ -21,7 +24,6 @@
 #'                    If state_check = FALSE, no values are printed
 #' @param country Name of country (needed if using seasonality model)
 #' @param admin_unit Name of administrative unit (needed if using seasonality model)
-#' @param preyears Length of time in years the deterministic seasonal model should run before Jan 1 of the year observations began (default = 2)
 #' @param seasonality_on Toggle seasonality model run before observed time period (default = 1)
 #' @param seasonality_check Toggle saving values of seasonality equilibrium (default = 1)
 #' @param check_flexibility Toggle saving values of flexibility period

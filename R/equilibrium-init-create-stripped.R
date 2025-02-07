@@ -16,6 +16,9 @@
 #' @param ft Numeric for the frequency of people seeking treatment.
 #' @param init_EIR Numeric for desired annual EIR.
 #' @param model_param_list List of epidemiological parameters created by
+#' @param state_check If state_check = TRUE, returns expected deriv values which should equal 0 and sets stochastic model to have EIR constant at init_EIR
+#'                    If state_check = TRUE and seasonality_on = 1, then the deterministic seasonal model is still run, but theta2 is forced to 1, forcing a constant seasonality profile
+#'                    If state_check = FALSE, no values are printed
 #'
 #' @importFrom stringi stri_trans_general
 #' @importFrom statmod gauss.quad.prob

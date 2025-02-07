@@ -7,10 +7,7 @@
 user_informed(init_state)
 }
 \arguments{
-\item{mpl}{Model parameter list. Default = NULL}
-
-\item{season_model}{Seasonality model to be used for the optional deterministic
-model. Default = NULL}
+\item{init_state}{Initial state}
 }
 \description{
 \code{user_informed} Calculates the model equilibrium based on an initial EIR values,

@@ -32,6 +32,10 @@ test_pf(
 \arguments{
 \item{data_raw}{Time series data to fit model}
 
+\item{data_raw_pg}{Time series of primigravidae ANC data to fit model}
+
+\item{data_raw_mg}{Time series of multigravidae ANC data to fit model}
+
 \item{n_particles}{Number of particles to be used in pMCMC (default = 200)}
 
 \item{proposal_matrix}{Proposal matrix for MCMC parameters}
@@ -67,6 +71,13 @@ If state_check = 0, no values are printed}
 \item{seed}{Allows user to specify a seed (default = 1L)}
 
 \item{start_pf_time}{Number of days before first observation that particle filter will start (default = 30)}
+
+\item{stoch_param}{Which parameter to test}
+
+\item{comparison}{The comparison function to be used. Either 'u5' which
+equates the observed prevalence to prevalence under 5 years old in
+the model or 'pgmg' which calculates prevalence in primigravid and
+multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')}
 }
 \description{
 This function sets up and runs a particle MCMC that uses Dust, Odin and MCState

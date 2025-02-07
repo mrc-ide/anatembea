@@ -35,12 +35,18 @@ run_pmcmc(
 \arguments{
 \item{data_raw}{Time series data to fit model}
 
+\item{data_raw_pg}{Time series of primigravidae ANC data to fit model}
+
+\item{data_raw_mg}{Time series of multigravidae ANC data to fit model}
+
 \item{init_EIR}{A single value or a dataframe with two columns (time and EIR)
 to specify historical malaria transmission levels before
 data collection began.}
 
 \item{target_prev}{Return an initial EIR value (from the equilibrium solution),
 given a target prevalence in under 5yos}
+
+\item{target_prev_group}{Age group used for target prevalence}
 
 \item{n_particles}{Number of particles to be used in pMCMC (default = 200)}
 
@@ -84,8 +90,6 @@ the model or 'pgmg' which calculates prevalence in primigravid and
 multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')}
 
 \item{initial}{Is the initial equilibrium state informed by the user ('user-informed') or by the observed data ('fitted')?}
-
-\item{preyears}{Length of time in years the deterministic seasonal model should run before Jan 1 of the year observations began (default = 2)}
 }
 \description{
 This function sets up and runs a particle MCMC that uses Dust, Odin and MCState
