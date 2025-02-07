@@ -299,7 +299,7 @@ model_param_list_create <- function(
   }
 
   ## Gravidity prevalence conversion coefficients:
-  coefs_pgsgmg_df <- apply(load_file('pgsgmg_corr_sample.RDS'),2,median)
+  coefs_pgsgmg_df <- apply(load_file('pgsgmg_corr_sample.rds'),2,median)
   coefs_all_df <- apply(load_file('all_corr_sample.RDS'),2,median)
 
   av_lo_child <- coefs_pgsgmg_df[['av_lo_child']]
