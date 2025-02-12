@@ -227,27 +227,39 @@ parameters that will be fit.</li>
 <span>                       target_prev <span class="op">=</span> <span class="fl">0.4</span>,</span>
 <span>                       n_steps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="color: #00BBBB;">R CMD INSTALL</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────────────</span></span></span>
-<span><span class="co">#&gt; * installing *source* package ‘odin.model.stripped.seasonal9f89af4b’ ...</span></span>
+<span><span class="co">#&gt; * installing *source* package ‘odin.model.stripped.seasonalc18373d9’ ...</span></span>
 <span><span class="co">#&gt; ** using staged installation</span></span>
 <span><span class="co">#&gt; ** libs</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
 <span><span class="co">#&gt; gcc -I"/opt/R/4.4.2/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c odin.c -o odin.o</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">odin.c:</span> In function ‘<span style="font-weight: bold;">odin_model_stripped_seasonal_initial_conditions</span>’:</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">odin.c:2286:10:</span> <span style="color: #BB00BB; font-weight: bold;">warning: </span>unused variable ‘<span style="font-weight: bold;">t</span>’ [<span style="color: #BB00BB; font-weight: bold;">-Wunused-variable</span>]</span></span>
-<span><span class="co">#&gt;  2286 |   double <span style="color: #BB00BB; font-weight: bold;">t</span> = scalar_real(t_ptr, "t");</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">odin.c:2307:10:</span> <span style="color: #BB00BB; font-weight: bold;">warning: </span>unused variable ‘<span style="font-weight: bold;">t</span>’ [<span style="color: #BB00BB; font-weight: bold;">-Wunused-variable</span>]</span></span>
+<span><span class="co">#&gt;  2307 |   double <span style="color: #BB00BB; font-weight: bold;">t</span> = scalar_real(t_ptr, "t");</span></span>
 <span><span class="co">#&gt;       |          <span style="color: #BB00BB; font-weight: bold;">^</span></span></span>
 <span><span class="co">#&gt; gcc -I"/opt/R/4.4.2/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o</span></span>
-<span><span class="co">#&gt; gcc -shared -L/opt/R/4.4.2/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal9f89af4b.so odin.o registration.o -L/opt/R/4.4.2/lib/R/lib -lR</span></span>
-<span><span class="co">#&gt; installing to /tmp/RtmpYuczoQ/devtools_install_1ff5b98a1da/00LOCK-file1ff524cb74aa/00new/odin.model.stripped.seasonal9f89af4b/libs</span></span>
+<span><span class="co">#&gt; gcc -shared -L/opt/R/4.4.2/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonalc18373d9.so odin.o registration.o -L/opt/R/4.4.2/lib/R/lib -lR</span></span>
+<span><span class="co">#&gt; installing to /tmp/RtmpZauBoa/devtools_install_1d2a299ad5ed/00LOCK-file1d2a15211f6/00new/odin.model.stripped.seasonalc18373d9/libs</span></span>
 <span><span class="co">#&gt; ** checking absolute paths in shared objects and dynamic libraries</span></span>
-<span><span class="co">#&gt; * DONE (odin.model.stripped.seasonal9f89af4b)</span></span>
-<span><span class="co">#&gt; Unused equation: mu0</span></span>
-<span><span class="co">#&gt;  mu0 &lt;- user() # baseline mosquito death rate # (line 323)</span></span>
+<span><span class="co">#&gt; * DONE (odin.model.stripped.seasonalc18373d9)</span></span>
+<span><span class="co">#&gt; Unused equation: age_flex_length</span></span>
+<span><span class="co">#&gt;  age_flex_length &lt;- user(integer=TRUE) # (line 485)</span></span>
 <span><span class="co">#&gt; Optimizing initial EIR based on target prevalence.</span></span>
 <span><span class="co">#&gt; Initial EIR set to 29.3.</span></span>
 <span><span class="co">#&gt; Running chain 1 / 1</span></span>
 <span><span class="co">#&gt; Finished 10 steps in 49 secs</span></span>
-<span><span class="co">#&gt; Time difference of 53.67744 secs</span></span></code></pre></div>
+<span><span class="co">#&gt; Time difference of 53.68905 secs</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mamasante</span><span class="fu">::</span><span class="fu"><a href="../reference/run_pmcmc.html">run_pmcmc</a></span><span class="op">(</span>data_raw<span class="op">=</span><span class="va">tanga_data_slim</span>,</span>
+<span>                       n_particles<span class="op">=</span><span class="fl">100</span>,</span>
+<span>                       target_prev <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>                       n_steps <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>                       comparison <span class="op">=</span> <span class="st">'2to10'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Unused equation: age_flex_length</span></span>
+<span><span class="co">#&gt;  age_flex_length &lt;- user(integer=TRUE) # (line 485)</span></span>
+<span><span class="co">#&gt; Optimizing initial EIR based on target prevalence.</span></span>
+<span><span class="co">#&gt; Initial EIR set to 29.3.</span></span>
+<span><span class="co">#&gt; Running chain 1 / 1</span></span>
+<span><span class="co">#&gt; Finished 10 steps in 54 secs</span></span>
+<span><span class="co">#&gt; Time difference of 58.88892 secs</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="visualising-output">Visualising output<a class="anchor" aria-label="anchor" href="#visualising-output"></a>
