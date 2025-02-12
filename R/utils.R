@@ -772,3 +772,33 @@ get_init_EIR_u5 <- function(par,mpl){
 
   return((equil$prev05 - mpl$target_prev)^2)
 }
+#' Return ANC prevalence given prevalence in <5 year old children
+#'
+#' \code{get_anc_from_u5} Return ANC prevalence given prevalence in <5 year old children
+#'
+#' @param prev_u5 Prevalence in under 5 year old children
+#' @param avg_prev Average level of prevalence in children under 5 years old to set level of immunity within population
+#'
+#' @export
+#' @examples
+#' get_anc_from_u5(prev_u5=0.3,avg_prev=0.2)
+#'
+##Function to get ANC prevalence from under 5 prevalence
+get_anc_from_u5 <- function(prev_u5,avg_prev){
+  ##First create the model parameter list (mpl) to get coefficients based on your
+  ##assumed level of burden (here in children under 5)
+  mpl <- mamasante::model_param_list_create(comparison='u5',avg_prev = avg_prev)
+
+  logodds_child <- log(prev_u5/(1-prev_u5))
+
+  log_odds_pg <- logodds_child + mpl$log_OR_pg_v_c
+  log_odds_sg <- log_odds_pg + mpl$log_OR_ps_v_pp
+  log_odds_mg <- log_odds_pg + mpl$log_OR_pm_v_pp
+  log_odds_all <- logodds_child + mpl$log_OR_pall_v_c
+
+  return(list(prev_preg_pg = exp(log_odds_pg)/(1+exp(log_odds_pg)),
+              prev_preg_sg = exp(log_odds_sg)/(1+exp(log_odds_sg)),
+              prev_preg_mg = exp(log_odds_mg)/(1+exp(log_odds_mg)),
+              prev_preg_all = exp(log_odds_all)/(1+exp(log_odds_all))
+  ))
+}
