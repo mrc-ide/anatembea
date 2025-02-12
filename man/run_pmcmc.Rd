@@ -87,7 +87,8 @@ If state_check = FALSE, no values are printed}
 \item{comparison}{The comparison function to be used. Either 'u5' which
 equates the observed prevalence to prevalence under 5 years old in
 the model or 'pgmg' which calculates prevalence in primigravid and
-multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')}
+multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')
+If in a format XtoY, where X and Y are two numbers, will compare to general population between those two ages.}
 
 \item{initial}{Is the initial equilibrium state informed by the user ('user-informed') or by the observed data ('fitted')?}
 }

@@ -35,6 +35,7 @@
 #'          equates the observed prevalence to prevalence under 5 years old in
 #'          the model or 'pgmg' which calculates prevalence in primigravid and
 #'          multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')
+#'          If in a format XtoY, where X and Y are two numbers, will compare to general population between those two ages.
 #' @export
 run_pmcmc <- function(data_raw=NULL,
                       data_raw_pg=NULL,
@@ -74,6 +75,9 @@ run_pmcmc <- function(data_raw=NULL,
     pg_avg_prev <- sum(data_raw[1:12,'positive.pg'],na.rm=TRUE)/sum(data_raw[1:12,'tested.pg'],na.rm=TRUE)
     mg_avg_prev <- sum(data_raw[1:12,'positive.mg'],na.rm=TRUE)/sum(data_raw[1:12,'tested.mg'],na.rm=TRUE)
     avg_prev <- c(pg_avg_prev,mg_avg_prev)
+  } else if(grepl("\\d+to\\d+",comparison)){
+    data_raw <- format_na(data_raw)
+    avg_prev <- target_prev
   } else {
     data_raw <- format_na(data_raw)
     avg_prev <- sum(data_raw[1:12,'positive'],na.rm=TRUE)/sum(data_raw[1:12,'tested'],na.rm=TRUE)
@@ -92,7 +96,6 @@ run_pmcmc <- function(data_raw=NULL,
   atol <- 1e-6 # Probably alright to bring up a bit, maybe to 1e-4 (same with rtol)
   rtol <- 1e-6
   preyears <- 5 #Length of time in years the deterministic seasonal model should run before Jan 1 of the year observations began
-
 
   #Create model parameter list. Also loads seasonality profile data file to match to desired admin_unit and country
   mpl_pf <- mamasante::model_param_list_create(init_age = init_age,
@@ -153,7 +156,7 @@ run_pmcmc <- function(data_raw=NULL,
     mcmc_pars <- mcstate::pmcmc_parameters$new(pars,
                                                proposal_matrix,
                                                transform = user_informed(init_state)) ## Calls transformation function based on pmcmc parameters
-  }else if(initial == 'fitted'){
+   }else if(initial == 'fitted'){
     log_init_EIR <- mcstate::pmcmc_parameter("log_init_EIR", rnorm(1, mean = 4, sd = 3),
                                              prior = function(p) dnorm(p, mean = 4, sd = 3, log = TRUE) + p) #Add p to adjust for sampling on log scale
     pars = list(log_init_EIR = log_init_EIR, volatility = volatility) ## Put pmcmc parameters into a list
@@ -171,6 +174,7 @@ run_pmcmc <- function(data_raw=NULL,
     index <- function(info) {
       list(run = c(prev = info$index$prev),
            state = c(prev_05 = info$index$prev,
+                     prev_flex = info$index$prev_flex,
                      EIR = info$index$EIR_out,
                      betaa = info$index$betaa_out,
                      clininc_all = info$index$inc,
@@ -351,58 +355,33 @@ run_pmcmc <- function(data_raw=NULL,
                      moz2human_ratio = info$index$moz2human_ratio))
     }
     compare_funct <- compare_ancall
-  }
-
-  ##Tune particles
-  if(particle_tune){
-    control_tune <- mcstate::pmcmc_control(
-      n_steps=100,
-      save_state = FALSE,
-      save_trajectories = FALSE,
-      progress = TRUE,
-      n_chains = n_chains, #TO DO: Make parameter to easily change
-      n_workers = n_workers, #TO DO: Make parameter to easily change
-      n_threads_total = n_threads,
-      rerun_every = 1,
-      rerun_random = FALSE)
-
-    init_state$fixed_vol <- 1
-    init_state$fixed_betaa <- init_state$betaa_eq
-
-    min <- 10
-    max <- 200
-    test <- union(min * 2**(seq(0, floor(log2(max / min)))), max)
-    found_good <- FALSE
-    id <- 0
-    target_variance <- 1
-
-    while (!found_good && (id + 1) < length(test)) {
-      id <- id + 1
-      pf_tune <- mcstate::particle_filter$new(data, model, n_particles=test[id], compare_funct,
-                                                    index = index,
-                                                    stochastic_schedule = stochastic_schedule,
-                                                    ode_control = dust::dust_ode_control(max_steps = max_steps, atol = atol, rtol = rtol),
-                                                    n_threads = n_threads)
-      pmcmc_run <- mcstate::pmcmc(mcmc_pars, pf_tune, control = control_tune)
-
-      var_loglik <- stats::var(pmcmc_run$probabilities[,'log_likelihood'])
-      print(pmcmc_run$probabilities)
-      print(pmcmc_run$probabilities[,'log_likelihood'])
-      print(var_loglik)
-      if (is.na(var_loglik)) var_loglik <- 0
-
-      message(
-        date(), " ", test[id], " particles, loglikelihod variance: ",
-        var_loglik
-      )
-
-      if (var_loglik < target_variance) {
-        ## choose smallest var-loglikelihood < target_variance
-        found_good <- TRUE
-      }
+  }else if(grepl("\\d+to\\d+",comparison)){
+    index <- function(info) {
+      list(run = c(prev_flex = info$index$prev_flex),
+           state = c(prev_05 = info$index$prev,
+                     prev_flex = info$index$prev_flex,
+                     prev_pg = info$index$prev_preg_pg,
+                     prev_sg = info$index$prev_preg_sg,
+                     prev_anc_all = info$index$prev_preg_all,
+                     EIR = info$index$EIR_out,
+                     betaa = info$index$betaa_out,
+                     clininc_all = info$index$inc,
+                     prev_all = info$index$prevall,
+                     clininc_05 = info$index$inc05,
+                     Dout = info$index$Dout,
+                     Aout = info$index$Aout,
+                     Uout = info$index$Uout,
+                     p_det_out = info$index$p_det_out,
+                     phi_out = info$index$phi_out,
+                     b_out = info$index$b_out,
+                     IC_out = info$index$IC_out,
+                     IB_out = info$index$IB_out,
+                     ID_out = info$index$ID_out,
+                     spz_rate = info$index$spz_rate,
+                     eff_moz_pop = info$index$eff_moz_pop,
+                     moz2human_ratio = info$index$moz2human_ratio))
     }
-    if (!found_good) id <- length(test) #Take largest number of particles if still not hitting variance target
-    n_particles <- test[id]
+    compare_funct <- compare_flex
   }
 
   set.seed(seed) #To reproduce pMCMC results

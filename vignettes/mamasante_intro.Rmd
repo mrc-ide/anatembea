@@ -118,6 +118,12 @@ result <- mamasante::run_pmcmc(data_raw=tanga_data_slim,
                        n_particles=100,
                        target_prev = 0.4,
                        n_steps = 10)
+result <- mamasante::run_pmcmc(data_raw=tanga_data_slim,
+                       n_particles=100,
+                       target_prev = 0.4,
+                       n_steps = 10,
+                       comparison = '2to10')
+
 ```
 
 ## Visualising output

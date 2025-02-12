@@ -220,6 +220,9 @@ transform_init <- function(final_state = NULL){
        age59 = f$age59_init[last],
        age05 = f$age05_init[last],
        age = f$age_init[last,],
+       age0 = f$age0_init[last],
+       age1 = f$age1_init[last],
+       age_flex_length = f$age_flex_length_init[last],
        ft = f$ft_init[last],
        age20l = f$age20l_init[last],
        age20u = f$age20u_init[last],
@@ -399,6 +402,28 @@ compare_ancall <- function(state, observed, pars = NULL) {
   return(ll)
 }
 #------------------------------------------------
+#' Compare function to calculate likelihood when fitting to a flexible age group
+#'
+#' \code{compare_flex} Compare function that compares observed data with model estimate
+#'  to calculate likelihood for the particle filter. For fitting to a general population
+#'  of a user-specified age group
+#'
+#' @param state Model output. Default = NULL
+#' @param observed Oberved data. Default = NULL
+#' @param pars Parameters, optional.
+#'
+#' @export
+compare_flex <- function(state, observed, pars = NULL) {
+  #skip comparison if data is missing
+  if(is.na(observed$positive)) {
+    return(numeric(length(state[1,])))}
+  ll <- dbinom(x = observed$positive,
+               size = observed$tested,
+               prob = state['prev_flex',],
+               log = TRUE)
+  return(ll)
+}
+#------------------------------------------------
 #' Estimate the initial state given user inputs
 #'
 #' \code{initialise} Calculates the model equilibrium based on an initial EIR values,
@@ -414,6 +439,7 @@ compare_ancall <- function(state, observed, pars = NULL) {
 initialise <- function(init_EIR,mpl,det_model){
   EIR_vals <- NULL
   EIR_times <- NULL
+
   ##Convert EIR dataframe into vectors for use in the piecewise deterministic models.
   if(is.data.frame(init_EIR)){
     # print('Input EIR: ')
@@ -427,6 +453,7 @@ initialise <- function(init_EIR,mpl,det_model){
   }
   if(!is.null(mpl$target_prev)){
     message('Optimizing initial EIR based on target prevalence.')
+
     opt_EIR <- suppressMessages(stats::optim(1,fn=mamasante::get_init_EIR,mpl=mpl,method='Brent',lower=0,upper=2000))
     init_EIR <- opt_EIR$par
   }
@@ -444,6 +471,7 @@ initialise <- function(init_EIR,mpl,det_model){
                                             ft = mpl$prop_treated,
                                             het_brackets = mpl$het_brackets,
                                             state_check = mpl$state_check)
+
   state <- append(state,list(EIR_times=EIR_times,EIR_vals=EIR_vals))
   # print('equilibrium state calculated')
   # print(state)
@@ -483,7 +511,7 @@ initialise <- function(init_EIR,mpl,det_model){
 
     # Transform seasonality model output to match expected input of the stochastic model
     init4pmcmc <- transform_init(out)
-    # print(init4pmcmc)
+
     # cat('prev equilibrium: ',state_use$prev,'\n')
     # cat('prev seasonal: ',init4pmcmc$prev,'\n')
     #Print some equilibrium checks if state_check==1
@@ -744,11 +772,13 @@ get_odds_from_prev<-function(prev){
 #' @export
 get_init_EIR <- function(par,mpl){
   init_EIR <- par[1]
+  message(paste0('Test 1'))
   equil <- mamasante::equilibrium_init_create_stripped(age_vector = mpl$init_age,
                                                     ft = mpl$prop_treated,
                                                     het_brackets = mpl$het_brackets,
                                                     init_EIR = init_EIR,
                                                     model_param_list = mpl)
+
   prev_age <- ifelse(mpl$target_prev_group =='u5','prev05','prev2.10')
 
 

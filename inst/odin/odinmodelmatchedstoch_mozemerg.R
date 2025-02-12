@@ -320,7 +320,6 @@ rel_foi[] <- user()
 # See supplementary materials S1 from http://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000324#s6
 # fitted entomological parameters:
 mv0 <- user() # initial mosquito density
-mu0 <- user() # baseline mosquito death rate
 p10 <- user() # prob of surviving 1 feeding cycle
 p2 <- user() #prob of surviving one resting cycle
 fv <- 1/( tau1 + tau2 ) # mosquito feeding rate (zbar from intervention param.)
@@ -483,11 +482,27 @@ dim(den) <- na
 # index of the age vector above 59 months
 age59 <- user(integer=TRUE)
 age05 <- user(integer=TRUE)
+age_flex_length <- user(integer=TRUE)
+age0 <- user(integer=TRUE)
+age1 <- user(integer=TRUE)
+
 # slide positivity in 0 -5 year age bracket
 dim(prev0to59) <- c(age59,nh)
 prev0to59[1:age59,] <- T[i,j] + D[i,j]  + A[i,j]*p_det[i,j]
 prev_u5 <- sum(prev0to59[,])/sum(den[1:age59])
 output(prev) <- prev_u5
+
+dim(prevX) <- c(age0,nh)
+dim(prevY) <- c(age1,nh)
+
+prevX[1:age0,] <- T[i,j] + D[i,j]  + A[i,j]*p_det[i,j]
+prevY[1:age1,] <- T[i,j] + D[i,j]  + A[i,j]*p_det[i,j]
+
+prev_flex <- (sum(prevY[,])-sum(prevX[,]))/sum(den[age0:age1])
+
+output(prev_flex) <- prev_flex
+
+
 output(age59)<-age59
 dim(prevall) <- c(na,nh)
 prevall[,] <- T[i,j] + D[i,j]  + A[i,j]*p_det[i,j]

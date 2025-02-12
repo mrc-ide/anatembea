@@ -69,6 +69,7 @@
 #' @param comparison Comparison group used to calculate likelihood
 #' @param country Country for seasonality profile
 #' @param admin_unit Admin for seasonality profile
+#' @param target_prev Prevalence used to estimate initial EIR
 #' @param ... Any other parameters needed for non-standard model. If they share the same name
 #' as any of the defined parameters \code{model_param_list_create} will stop. You can either write
 #' any extra parameters you like individually, e.g. model_param_list_create(extra1 = 1, extra2 = 2)
@@ -166,6 +167,7 @@ model_param_list_create <- function(
   admin_unit = NULL,
   comparison = NULL,
   avg_prev = 0.5,
+  target_prev = NULL,
   ...
 
 ){
@@ -313,9 +315,19 @@ model_param_list_create <- function(
   gradient_all <- coefs_all_df[['gradient']]
   intercept_all <- coefs_all_df[['intercept']]
 
+  mp_list$age_min <- 2
+  mp_list$age_max <- 10
+
   #Determine average log-odds of childhood prevalence depending on first year of available data
   if(comparison=='u5'){
     log_odds_child <- log(mamasante::get_odds_from_prev(avg_prev))
+  }else if(grepl("\\d+to\\d+",comparison)){
+    ages <- as.numeric(unlist(stringr::str_extract_all(comparison,"\\d+")))
+    mp_list$age_min <- min(ages)
+    mp_list$age_max <- max(ages)
+
+    log_odds_child <- log(mamasante::get_odds_from_prev(target_prev))
+
   }else if(comparison=='ancall'){
     log_odds_pall <- log(mamasante::get_odds_from_prev(avg_prev))
     log_odds_child <- ((log_odds_pall - intercept_all) + av_lo_child_all*gradient_all)/(gradient_all + 1)
@@ -335,6 +347,7 @@ model_param_list_create <- function(
   mp_list$log_OR_pm_v_pp<-intercept_mg+gradient_mg*(log_odds_child-av_lo_child)
   mp_list$log_OR_pall_v_c<-intercept_all+gradient_all*(log_odds_child-av_lo_child_all)
 
+  mp_list$target_prev <- target_prev
   # # Fertility parameters
   # #Gravidity inputs
   # MZ_multi_rates <- readRDS('MiP-given/MZ_multi_rates.rds')

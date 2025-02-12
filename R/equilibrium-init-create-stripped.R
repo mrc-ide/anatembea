@@ -54,8 +54,6 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
   na <- as.integer(length(age))  # number of age groups
   nh <- as.integer(het_brackets)  # number of heterogeneity groups
   h <- statmod::gauss.quad.prob(nh, dist = "normal")
-  age0 <- 2
-  age1 <- 10
 
   age_rate <- age_width <- age_mid_point <- den <- c()
   for (i in 1:(na-1))
@@ -78,6 +76,9 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
   age05 <- which(age_vector > 5)[1] - 1  # index of age vector before age is 5 years
   age02 <- which(age_vector > 2)[1] - 1  # index of age vector before age is 5 years
   age10 <- which(age_vector > 10)[1] - 1  # index of age vector before age is 5 years
+
+  age0 <- which(age_vector > mpl$age_min)[1] - 1 #Allow a user-defined age group
+  age1 <- which(age_vector > mpl$age_max)[1] - 1
 
   ## force of infection
   foi_age <- c()
@@ -247,6 +248,11 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
   }
   prev <- sum(prev_eq[1:age59,])/sum(den[1:age59])
   prev2.10 <- sum(prev_eq[age02:age10,])/sum(den[age02:age10])
+
+  age_flex_length <- age1 - age0 + 1
+
+  prev_flex <- sum(prev_eq[age0:age1,])/sum(den[age0:age1])
+
   # print(FOIvij_eq)
   # mosquito states
   FOIv_eq <- sum(FOIvij_eq)
@@ -293,6 +299,7 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
 
   inc <- sum(clin_inc)
   inc05 <- sum(clin_inc[1:age05,])/sum(den[1:age59])
+  inc_flex <- sum(clin_inc[age0:age1,])/sum(den[age0:age1])
 
 
   ## collate init
@@ -307,8 +314,11 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
               FOIv_eq = FOIv_eq,
               FOI_eq = FOI_eq, EIR_eq = EIR_eq, init_EIR = init_EIR,
               den = den, age59 = age59, age05 = age05,age10=age10,
+              age0 = age0, age1 = age1,
+              age_flex_length = age_flex_length,
               pi = pi,
               prev05 = prev,inc = inc, inc05=inc05,
+              prev_flex = prev_flex, inc_flex = inc_flex,
               prev2.10 = prev2.10,
               age = age_vector*mpl$DY, ft = ft,
               age20l = age20l, age20u = age20u, age_20_factor = age_20_factor

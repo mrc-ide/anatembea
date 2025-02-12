@@ -71,6 +71,7 @@ model_param_list_create(
   admin_unit = NULL,
   comparison = NULL,
   avg_prev = 0.5,
+  target_prev = NULL,
   ...
 )
 }
@@ -206,6 +207,8 @@ model_param_list_create(
 \item{comparison}{Comparison group used to calculate likelihood}
 
 \item{avg_prev}{Average prevalence during first year of data collection}
+
+\item{target_prev}{Prevalence used to estimate initial EIR}
 
 \item{...}{Any other parameters needed for non-standard model. If they share the same name
 as any of the defined parameters \code{model_param_list_create} will stop. You can either write

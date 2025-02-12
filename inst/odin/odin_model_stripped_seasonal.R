@@ -410,6 +410,10 @@ dim(den) <- na
 # index of the age vector above 59 months
 age59 <- user(integer=TRUE)
 age05 <- user(integer=TRUE)
+age_flex_length <- user(integer=TRUE)
+age0 <- user(integer=TRUE)
+age1 <- user(integer=TRUE)
+
 # slide positivity in 0 -5 year age bracket
 dim(prev0to59) <- c(age59,nh)
 prev0to59[1:age59,] <- T[i,j] + D[i,j]  + A[i,j]*p_det[i,j]
@@ -489,6 +493,9 @@ output(age59_init) <- age59
 output(age05_init) <- age05
 output(age_init[]) <- age[i]
 dim(age_init) <- c(na)
+output(age0_init) <- age0
+output(age1_init) <- age1
+output(age_flex_length_init) <- age_flex_length
 output(ft_init) <- ft
 output(age20l_init) <- age20l
 output(age20u_init) <- age20u
