@@ -443,6 +443,7 @@ output(inc) <- sum(clin_inc[,])
 
 EIR_agg[,] <- EIR[i,j]* DY /(rel_foi[j] * foi_age[i])
 dim(EIR_agg) <- c(na,nh)
+output(EIR_out) <- (av * Iv/omega)*DY
 
 
 ##Output for initial state of stochastic model
