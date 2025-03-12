@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(mamasante)
+library(anatambea)
 
-test_check("mamasante")
+test_check("anatambea")

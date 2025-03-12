@@ -320,25 +320,25 @@ model_param_list_create <- function(
 
   #Determine average log-odds of childhood prevalence depending on first year of available data
   if(comparison=='u5'){
-    log_odds_child <- log(mamasante::get_odds_from_prev(avg_prev))
+    log_odds_child <- log(anatambea::get_odds_from_prev(avg_prev))
   }else if(grepl("\\d+to\\d+",comparison)){
     ages <- as.numeric(unlist(stringr::str_extract_all(comparison,"\\d+")))
     mp_list$age_min <- min(ages)
     mp_list$age_max <- max(ages)
 
-    log_odds_child <- log(mamasante::get_odds_from_prev(target_prev))
+    log_odds_child <- log(anatambea::get_odds_from_prev(target_prev))
 
   }else if(comparison=='ancall'){
-    log_odds_pall <- log(mamasante::get_odds_from_prev(avg_prev))
+    log_odds_pall <- log(anatambea::get_odds_from_prev(avg_prev))
     log_odds_child <- ((log_odds_pall - intercept_all) + av_lo_child_all*gradient_all)/(gradient_all + 1)
   } else if(comparison=='mg'){
-    log_odds_mg <- log(mamasante::get_odds_from_prev(avg_prev))
+    log_odds_mg <- log(anatambea::get_odds_from_prev(avg_prev))
     log_odds_child <- (log_odds_mg - intercept_pg - intercept_mg + av_lo_child*(gradient_pg+gradient_mg))/(gradient_pg+gradient_mg+1)
   } else if(comparison=='sg'){
-    log_odds_sg <- log(mamasante::get_odds_from_prev(avg_prev))
+    log_odds_sg <- log(anatambea::get_odds_from_prev(avg_prev))
     log_odds_child <- (log_odds_sg - intercept_pg - intercept_sg + av_lo_child*(gradient_pg+gradient_sg))/(gradient_pg+gradient_sg+1)
   } else {
-    log_odds_pg <- log(mamasante::get_odds_from_prev(avg_prev[1]))
+    log_odds_pg <- log(anatambea::get_odds_from_prev(avg_prev[1]))
     log_odds_child <- ((log_odds_pg - intercept_pg) + av_lo_child*gradient_pg)/(gradient_pg + 1)
   }
   #Calculate ORs based on log-odds of childhood prevalence

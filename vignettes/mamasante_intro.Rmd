@@ -1,9 +1,9 @@
 ---
-title: "Using MAMASANTE to Reconstruct Transmission Patterns: A Vignette"
+title: "Using anatambea to Reconstruct Transmission Patterns: A Vignette"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using MAMASANTE to Reconstruct Transmission Patterns: A Vignette}
+  %\VignetteIndexEntry{Using anatambea to Reconstruct Transmission Patterns: A Vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,11 +16,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this vignette, we demonstrate how to use MAMASANTE to reconstruct patterns of transmission intensity, seasonality, and malaria burden in settings where women are screened for malaria (using either rapid diagnostic tests or slide microscopy) with data available at a monthly cadence. Later vignettes will explore scenarios involving different data cadences or stratifications (e.g., by gravidity).
+In this vignette, we demonstrate how to use anatambea to reconstruct patterns of transmission intensity, seasonality, and malaria burden in settings where women are screened for malaria (using either rapid diagnostic tests or slide microscopy) with data available at a monthly cadence. Later vignettes will explore scenarios involving different data cadences or stratifications (e.g., by gravidity).
 
 ## Understanding our approach
 
-MAMASANTE is a tool designed to integrate Dust, Odin, and MCState frameworks for fitting a semi-stochastic mechanistic disease transmission model to continuously collected prevalence data using particle Markov chain Monte Carlo (pMCMC). This package specifically fits a semi-stochastic version of the ‘malariasimulation’ model to monthly malaria prevalence among pregnant women at their first antenatal care (ANC1) visit. This vignette walks through a simple example and outlines various configurable options and settings.
+anatambea is a tool designed to integrate Dust, Odin, and MCState frameworks for fitting a semi-stochastic mechanistic disease transmission model to continuously collected prevalence data using particle Markov chain Monte Carlo (pMCMC). This package specifically fits a semi-stochastic version of the ‘malariasimulation’ model to monthly malaria prevalence among pregnant women at their first antenatal care (ANC1) visit. This vignette walks through a simple example and outlines various configurable options and settings.
 
 In the deterministic version of ‘malariasimulation’, seasonal variation in malaria transmission intensity is governed by a Fourier series, with coefficients pre-estimated from historical rainfall data. While this method provides reasonable seasonal profiles for fitting cross-sectional data collected at multi-year intervals (such as data from Demographic Health Surveys or Malaria Indicator Surveys), it lacks the flexibility required for fitting models to monthly prevalence data collected through ANC1.
 
@@ -29,11 +29,11 @@ Emergence rate change = *δ*∼*N*(0,*σ*).
 
 Here, *σ* is a volatility constant, and *β*, the mosquito emergence rate, is constrained by an upper limit *βmax* to maintain realism. The pMCMC filters likely emergence rate trajectories by comparing the observed prevalence with the model's estimated prevalence based on these trajectories. The output is a posterior distribution of plausible model trajectories.
 
-Since the relationship between mosquito emergence rates and infection prevalence is encoded within the mechanistic model, MAMASANTE allows us to infer trends in key indicators like the entomological inoculation rate (EIR) and clinical incidence, which are otherwise challenging to measure directly.
+Since the relationship between mosquito emergence rates and infection prevalence is encoded within the mechanistic model, anatambea allows us to infer trends in key indicators like the entomological inoculation rate (EIR) and clinical incidence, which are otherwise challenging to measure directly.
 
 ## Generating a test dataset
 
-At its core, our approach leverages the established relationships between temporal infection prevalence dynamics, transmission, and clinical burden, as defined in the malariasimulation model. Consequently, we can validate the inferential framework by generating simulated datasets from the model and verifying that MAMASANTE correctly recaptures the underlying seasonal dynamics.
+At its core, our approach leverages the established relationships between temporal infection prevalence dynamics, transmission, and clinical burden, as defined in the malariasimulation model. Consequently, we can validate the inferential framework by generating simulated datasets from the model and verifying that anatambea correctly recaptures the underlying seasonal dynamics.
 
 For this vignette, we use a simulation based on rainfall patterns in Tanga, Tanzania, where rainfall follows a characteristic bimodal pattern. This includes:
 
@@ -41,14 +41,14 @@ For this vignette, we use a simulation based on rainfall patterns in Tanga, Tanz
 2. A longer rainy season (November–January)
 3. An extended dry season (June–October)
 
-Bimodal rainfall patterns, such as those in Tanga, often present a challenging inferential problem for many algorithms attempting to estimate seasonality. However, by applying MAMASANTE, we aim to recapture these complex dynamics without supplying the model with prior information about the simulation parameters.
+Bimodal rainfall patterns, such as those in Tanga, often present a challenging inferential problem for many algorithms attempting to estimate seasonality. However, by applying anatambea, we aim to recapture these complex dynamics without supplying the model with prior information about the simulation parameters.
 
 The resulting relationship between malaria prevalence, clinical incidence, and EIR in Tanga, Tanzania is illustrated below:
 
 ```{r}
 library(dplyr)
 library(ggplot2)
-data_true <- mamasante::sim_data_tanzania%>%
+data_true <- anatambea::sim_data_tanzania%>%
   dplyr::filter(month<=zoo::as.yearmon('Dec 2019'))
 
 prev_plot_true <- ggplot(data=data_true)+
@@ -94,7 +94,7 @@ Data for fitting should be a data frame with at least three columns:
 In our example "tanga_data_slim" samples in the correct format have been generated by sampling binomially from infection prevalence from the simulation presented above.
 
 ```{r data}
-tanga_data_slim <- mamasante::sim_data_tanzania%>%
+tanga_data_slim <- anatambea::sim_data_tanzania%>%
   dplyr::select(month,positive,tested)%>%
   dplyr::filter(month<=zoo::as.yearmon('Dec 2019'))
 ```
@@ -114,11 +114,11 @@ The `run_pmcmc` function is the central tool to fit our model to observed data. 
 5.  Format output.
 
 ```{r pmcmc, fig.show='hold',  dependson="data"}
-result <- mamasante::run_pmcmc(data_raw=tanga_data_slim,
+result <- anatambea::run_pmcmc(data_raw=tanga_data_slim,
                        n_particles=100,
                        target_prev = 0.4,
                        n_steps = 10)
-result <- mamasante::run_pmcmc(data_raw=tanga_data_slim,
+result <- anatambea::run_pmcmc(data_raw=tanga_data_slim,
                        n_particles=100,
                        target_prev = 0.4,
                        n_steps = 10,

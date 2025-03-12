@@ -3,7 +3,7 @@
 #' \code{load_file} loads package file
 #'
 #' @description Load a file from within the inst/extdata folder of the
-#'   mamasante package. File extension must be one of .csv, .txt, or .rds.
+#'   anatambea package. File extension must be one of .csv, .txt, or .rds.
 #'
 #' @param name the name of a file within the inst/extdata folder.
 #'
@@ -21,7 +21,7 @@ load_file <- function(name) {
   }
 
   # get full file path
-  name_full <- system.file("extdata/", name, package="mamasante", mustWork = TRUE)
+  name_full <- system.file("extdata/", name, package="anatambea", mustWork = TRUE)
   message(name_full)
 
   # read in file
@@ -454,12 +454,12 @@ initialise <- function(init_EIR,mpl,det_model){
   if(!is.null(mpl$target_prev)){
     message('Optimizing initial EIR based on target prevalence.')
 
-    opt_EIR <- suppressMessages(stats::optim(1,fn=mamasante::get_init_EIR,mpl=mpl,method='Brent',lower=0,upper=2000))
+    opt_EIR <- suppressMessages(stats::optim(1,fn=anatambea::get_init_EIR,mpl=mpl,method='Brent',lower=0,upper=2000))
     init_EIR <- opt_EIR$par
   }
   # else if(!is.null(mpl$target_prev)&mpl$target_prev_group=='u5'){
   #   message('Optimizing initial EIR based on target prevalence in under 5 year olds.')
-  #   opt_EIR <- suppressMessages(stats::optim(1,fn=mamasante::get_init_EIR_u5,mpl=mpl,age_group='u5',method='Brent',lower=0,upper=2000))
+  #   opt_EIR <- suppressMessages(stats::optim(1,fn=anatambea::get_init_EIR_u5,mpl=mpl,age_group='u5',method='Brent',lower=0,upper=2000))
   #   init_EIR <- opt_EIR$par
   # }
   message(paste0('Initial EIR set to ',round(init_EIR,digits=1),'.'))
@@ -773,7 +773,7 @@ get_odds_from_prev<-function(prev){
 get_init_EIR <- function(par,mpl){
   init_EIR <- par[1]
   message(paste0('Test 1'))
-  equil <- mamasante::equilibrium_init_create_stripped(age_vector = mpl$init_age,
+  equil <- anatambea::equilibrium_init_create_stripped(age_vector = mpl$init_age,
                                                     ft = mpl$prop_treated,
                                                     het_brackets = mpl$het_brackets,
                                                     init_EIR = init_EIR,
@@ -794,7 +794,7 @@ get_init_EIR <- function(par,mpl){
 #' @export
 get_init_EIR_u5 <- function(par,mpl){
   init_EIR <- par[1]
-  equil <- mamasante::equilibrium_init_create_stripped(age_vector = mpl$init_age,
+  equil <- anatambea::equilibrium_init_create_stripped(age_vector = mpl$init_age,
                                                     ft = mpl$prop_treated,
                                                     het_brackets = mpl$het_brackets,
                                                     init_EIR = init_EIR,
@@ -817,7 +817,7 @@ get_init_EIR_u5 <- function(par,mpl){
 get_anc_from_u5 <- function(prev_u5,avg_prev){
   ##First create the model parameter list (mpl) to get coefficients based on your
   ##assumed level of burden (here in children under 5)
-  mpl <- mamasante::model_param_list_create(comparison='u5',avg_prev = avg_prev)
+  mpl <- anatambea::model_param_list_create(comparison='u5',avg_prev = avg_prev)
 
   logodds_child <- log(prev_u5/(1-prev_u5))
 

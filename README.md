@@ -1,19 +1,19 @@
 
-# mamasante
+# anatambea
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/jt-hicks/mamasante/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jt-hicks/mamasante/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/jt-hicks/anatambea/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jt-hicks/anatambea/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of mamasante is to ...
+The goal of anatambea is to ...
 
 ## Installation
 
-You can install the development version of mamasante from [GitHub](https://github.com/) with:
+You can install the development version of anatambea from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("jt-hicks/mamasante")
+devtools::install_github("jt-hicks/anatambea")
 ```
 
 ## Example
@@ -21,7 +21,7 @@ devtools::install_github("jt-hicks/mamasante")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(mamasante)
+library(anatambea)
 ## basic example code
 ```
 

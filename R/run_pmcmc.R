@@ -98,7 +98,7 @@ run_pmcmc <- function(data_raw=NULL,
   preyears <- 5 #Length of time in years the deterministic seasonal model should run before Jan 1 of the year observations began
 
   #Create model parameter list. Also loads seasonality profile data file to match to desired admin_unit and country
-  mpl_pf <- mamasante::model_param_list_create(init_age = init_age,
+  mpl_pf <- anatambea::model_param_list_create(init_age = init_age,
                                     prop_treated = prop_treated,
                                     het_brackets = het_brackets,
                                     max_param = max_param,
@@ -119,22 +119,22 @@ run_pmcmc <- function(data_raw=NULL,
   ## If a deterministic seasonal model is needed prior to the stochastic model, this loads the deterministic odin model
   det_model <- NULL
   if(seasonality_on & !is.data.frame(init_EIR)){
-    odin_det <- system.file("odin", "odin_model_stripped_seasonal.R", package = "mamasante")
+    odin_det <- system.file("odin", "odin_model_stripped_seasonal.R", package = "anatambea")
     det_model <- suppressMessages(odin::odin(odin_det))
   } else if(!(seasonality_on) & is.data.frame(init_EIR)){
-    odin_det <- system.file("odin", "odin_model_stripped_matched.R", package = "mamasante")
+    odin_det <- system.file("odin", "odin_model_stripped_matched.R", package = "anatambea")
     det_model <- suppressMessages(odin::odin(odin_det))
   } else if(seasonality_on & is.data.frame(init_EIR)){
     print('Seasonality not supported with multiple EIR values.')
     print('Reverting to piece-wise constant EIR.')
-    odin_det <- system.file("odin", "odin_model_stripped_matched.R", package = "mamasante")
+    odin_det <- system.file("odin", "odin_model_stripped_matched.R", package = "anatambea")
     det_model <- suppressMessages(odin::odin(odin_det))
   }
 
   ## Load stochastic model in odin.dust
   ##Switch between EIR and mosquito emergence models
   stoch_file <- 'odinmodelmatchedstoch_mozemerg.R'
-  odin_stoch <- system.file("odin", stoch_file, package = "mamasante")
+  odin_stoch <- system.file("odin", stoch_file, package = "anatambea")
 
   model <- odin.dust::odin_dust(odin_stoch,verbose = FALSE)
 

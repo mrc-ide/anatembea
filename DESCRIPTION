@@ -1,15 +1,15 @@
-Package: mamasante
-Title: Tool to Apply Dust
-Version: 0.0.0.9000
+Package: anatambea
+Title: AnteNatal Assessment of Temporal malaria Epidemiology using Mechanistic models, Bayesian Estimation, and Analysis
+Version: 0.1
 Authors@R: 
-    person("Joseph", "Hicks", email = "jthicks@imperial.ac.uk", role = c("aut","cre"))
-Description: Tool to Apply Dust
+    person("Joseph", "Hicks", email = "joe.tal.hicks@gmail.com", role = c("aut","cre"))
+Description: a tool for AnteNatal Assessment of Temporal malaria Epidemiology using Mechanistic models, Bayesian Estimation, and Analysis, an open-source R package, which attempts to address this problem by translating monthly ANC1 prevalence into seasonal patterns in malaria transmission and clinical cases.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-URL: https://github.com/jt-hicks/mamasante
-BugReports: https://github.com/jt-hicks/mamasante/issues
+URL: https://github.com/jt-hicks/anatambea
+BugReports: https://github.com/jt-hicks/anatambea/issues
 VignetteBuilder: 
     knitr
 Imports:
