@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Using MAMASANTE to Reconstruct Transmission Patterns: A Vignette • mamasante</title>
+<title>Using anatambea to Reconstruct Transmission Patterns: A Vignette • anatambea</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Using MAMASANTE to Reconstruct Transmission Patterns: A Vignette">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Using anatambea to Reconstruct Transmission Patterns: A Vignette">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -18,9 +18,9 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="../index.html">mamasante</a>
+    <a class="navbar-brand me-2" href="../index.html">anatambea</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/mamasante_intro.html">Using MAMASANTE to Reconstruct Transmission Patterns: A Vignette</a></li>
+<li><a class="dropdown-item" href="../articles/mamasante_intro.html">Using anatambea to Reconstruct Transmission Patterns: A Vignette</a></li>
   </ul>
 </li>
       </ul>
@@ -41,7 +41,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/jt-hicks/mamasante/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/jt-hicks/anatambea/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -55,17 +55,17 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Using MAMASANTE to Reconstruct Transmission Patterns: A Vignette</h1>
+      <h1>Using anatambea to Reconstruct Transmission Patterns: A Vignette</h1>
             
-            <h4 data-toc-skip class="date">2025-03-04</h4>
+            <h4 data-toc-skip class="date">2025-03-12</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/jt-hicks/mamasante/blob/main/vignettes/mamasante_intro.Rmd" class="external-link"><code>vignettes/mamasante_intro.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jt-hicks/anatambea/blob/main/vignettes/mamasante_intro.Rmd" class="external-link"><code>vignettes/mamasante_intro.Rmd</code></a></small>
       <div class="d-none name"><code>mamasante_intro.Rmd</code></div>
     </div>
 
     
     
-<p>In this vignette, we demonstrate how to use MAMASANTE to reconstruct
+<p>In this vignette, we demonstrate how to use anatambea to reconstruct
 patterns of transmission intensity, seasonality, and malaria burden in
 settings where women are screened for malaria (using either rapid
 diagnostic tests or slide microscopy) with data available at a monthly
@@ -74,7 +74,7 @@ cadences or stratifications (e.g., by gravidity).</p>
 <div class="section level2">
 <h2 id="understanding-our-approach">Understanding our approach<a class="anchor" aria-label="anchor" href="#understanding-our-approach"></a>
 </h2>
-<p>MAMASANTE is a tool designed to integrate Dust, Odin, and MCState
+<p>anatambea is a tool designed to integrate Dust, Odin, and MCState
 frameworks for fitting a semi-stochastic mechanistic disease
 transmission model to continuously collected prevalence data using
 particle Markov chain Monte Carlo (pMCMC). This package specifically
@@ -102,7 +102,7 @@ trajectories by comparing the observed prevalence with the model’s
 estimated prevalence based on these trajectories. The output is a
 posterior distribution of plausible model trajectories.</p>
 <p>Since the relationship between mosquito emergence rates and infection
-prevalence is encoded within the mechanistic model, MAMASANTE allows us
+prevalence is encoded within the mechanistic model, anatambea allows us
 to infer trends in key indicators like the entomological inoculation
 rate (EIR) and clinical incidence, which are otherwise challenging to
 measure directly.</p>
@@ -114,7 +114,7 @@ measure directly.</p>
 between temporal infection prevalence dynamics, transmission, and
 clinical burden, as defined in the malariasimulation model.
 Consequently, we can validate the inferential framework by generating
-simulated datasets from the model and verifying that MAMASANTE correctly
+simulated datasets from the model and verifying that anatambea correctly
 recaptures the underlying seasonal dynamics.</p>
 <p>For this vignette, we use a simulation based on rainfall patterns in
 Tanga, Tanzania, where rainfall follows a characteristic bimodal
@@ -126,7 +126,7 @@ pattern. This includes:</p>
 </ol>
 <p>Bimodal rainfall patterns, such as those in Tanga, often present a
 challenging inferential problem for many algorithms attempting to
-estimate seasonality. However, by applying MAMASANTE, we aim to
+estimate seasonality. However, by applying anatambea, we aim to
 recapture these complex dynamics without supplying the model with prior
 information about the simulation parameters.</p>
 <p>The resulting relationship between malaria prevalence, clinical
@@ -142,7 +142,7 @@ incidence, and EIR in Tanga, Tanzania is illustrated below:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="va">data_true</span> <span class="op">&lt;-</span> <span class="fu">mamasante</span><span class="fu">::</span><span class="va"><a href="../reference/sim_data_tanzania.html">sim_data_tanzania</a></span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">data_true</span> <span class="op">&lt;-</span> <span class="fu">anatambea</span><span class="fu">::</span><span class="va"><a href="../reference/sim_data_tanzania.html">sim_data_tanzania</a></span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">month</span><span class="op">&lt;=</span><span class="fu">zoo</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html" class="external-link">as.yearmon</a></span><span class="op">(</span><span class="st">'Dec 2019'</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">prev_plot_true</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">data_true</span><span class="op">)</span><span class="op">+</span></span>
@@ -192,7 +192,7 @@ results</li>
 been generated by sampling binomially from infection prevalence from the
 simulation presented above.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tanga_data_slim</span> <span class="op">&lt;-</span> <span class="fu">mamasante</span><span class="fu">::</span><span class="va"><a href="../reference/sim_data_tanzania.html">sim_data_tanzania</a></span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">tanga_data_slim</span> <span class="op">&lt;-</span> <span class="fu">anatambea</span><span class="fu">::</span><span class="va"><a href="../reference/sim_data_tanzania.html">sim_data_tanzania</a></span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">month</span>,<span class="va">positive</span>,<span class="va">tested</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">month</span><span class="op">&lt;=</span><span class="fu">zoo</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html" class="external-link">as.yearmon</a></span><span class="op">(</span><span class="st">'Dec 2019'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -222,7 +222,7 @@ parameters that will be fit.</li>
 <li>Format output.</li>
 </ol>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mamasante</span><span class="fu">::</span><span class="fu"><a href="../reference/run_pmcmc.html">run_pmcmc</a></span><span class="op">(</span>data_raw<span class="op">=</span><span class="va">tanga_data_slim</span>,</span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">anatambea</span><span class="fu">::</span><span class="fu"><a href="../reference/run_pmcmc.html">run_pmcmc</a></span><span class="op">(</span>data_raw<span class="op">=</span><span class="va">tanga_data_slim</span>,</span>
 <span>                       n_particles<span class="op">=</span><span class="fl">100</span>,</span>
 <span>                       target_prev <span class="op">=</span> <span class="fl">0.4</span>,</span>
 <span>                       n_steps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
@@ -238,7 +238,7 @@ parameters that will be fit.</li>
 <span><span class="co">#&gt;       |          <span style="color: #BB00BB; font-weight: bold;">^</span></span></span>
 <span><span class="co">#&gt; gcc -I"/opt/R/4.4.3/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o</span></span>
 <span><span class="co">#&gt; gcc -shared -L/opt/R/4.4.3/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal605da84f.so odin.o registration.o -L/opt/R/4.4.3/lib/R/lib -lR</span></span>
-<span><span class="co">#&gt; installing to /tmp/RtmpTXOhsg/devtools_install_20626feceed3/00LOCK-file206272134f4b/00new/odin.model.stripped.seasonal605da84f/libs</span></span>
+<span><span class="co">#&gt; installing to /tmp/RtmpJRXVlo/devtools_install_1d6c2cf3af79/00LOCK-file1d6c2224bc2c/00new/odin.model.stripped.seasonal605da84f/libs</span></span>
 <span><span class="co">#&gt; ** checking absolute paths in shared objects and dynamic libraries</span></span>
 <span><span class="co">#&gt; * DONE (odin.model.stripped.seasonal605da84f)</span></span>
 <span><span class="co">#&gt; Unused equation: age_flex_length</span></span>
@@ -246,9 +246,9 @@ parameters that will be fit.</li>
 <span><span class="co">#&gt; Optimizing initial EIR based on target prevalence.</span></span>
 <span><span class="co">#&gt; Initial EIR set to 29.3.</span></span>
 <span><span class="co">#&gt; Running chain 1 / 1</span></span>
-<span><span class="co">#&gt; Finished 10 steps in 49 secs</span></span>
-<span><span class="co">#&gt; Time difference of 53.82844 secs</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">mamasante</span><span class="fu">::</span><span class="fu"><a href="../reference/run_pmcmc.html">run_pmcmc</a></span><span class="op">(</span>data_raw<span class="op">=</span><span class="va">tanga_data_slim</span>,</span>
+<span><span class="co">#&gt; Finished 10 steps in 48 secs</span></span>
+<span><span class="co">#&gt; Time difference of 53.39225 secs</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">anatambea</span><span class="fu">::</span><span class="fu"><a href="../reference/run_pmcmc.html">run_pmcmc</a></span><span class="op">(</span>data_raw<span class="op">=</span><span class="va">tanga_data_slim</span>,</span>
 <span>                       n_particles<span class="op">=</span><span class="fl">100</span>,</span>
 <span>                       target_prev <span class="op">=</span> <span class="fl">0.4</span>,</span>
 <span>                       n_steps <span class="op">=</span> <span class="fl">10</span>,</span>
@@ -259,7 +259,7 @@ parameters that will be fit.</li>
 <span><span class="co">#&gt; Initial EIR set to 29.3.</span></span>
 <span><span class="co">#&gt; Running chain 1 / 1</span></span>
 <span><span class="co">#&gt; Finished 10 steps in 53 secs</span></span>
-<span><span class="co">#&gt; Time difference of 58.77649 secs</span></span></code></pre></div>
+<span><span class="co">#&gt; Time difference of 58.702 secs</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="visualising-output">Visualising output<a class="anchor" aria-label="anchor" href="#visualising-output"></a>
