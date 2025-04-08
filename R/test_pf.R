@@ -132,7 +132,7 @@ test_pf <- function(data_raw=NULL,
 
   ## If a deterministic seasonal model is needed prior to the stochastic model, this loads the deterministic odin model
   if(seasonality_on == 1){
-    odin_det <- system.file("odin", "odin_model_stripped_seasonal.R", package = "anatambea")
+    odin_det <- system.file("odin", "odin_model_stripped_seasonal.R", package = "anatembea")
     season_model <- odin::odin(odin_det)
   }
 
@@ -141,7 +141,7 @@ test_pf <- function(data_raw=NULL,
   # print('about to load stochastic model')
   ##Switch between EIR and mosquito emergence models
   stoch_file <- ifelse(stoch_param=='betaa','odinmodelmatchedstoch_mozemerg.R','odinmodelmatchedstoch.R')
-  odin_stoch <- system.file("odin", stoch_file, package = "anatambea")
+  odin_stoch <- system.file("odin", stoch_file, package = "anatembea")
   model <- odin.dust::odin_dust(odin_stoch)
   # print('loaded stochastic model')
 

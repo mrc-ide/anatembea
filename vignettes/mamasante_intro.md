@@ -1,9 +1,9 @@
-anatambea introduction
+anatembea introduction
 ================
 Joseph Hicks
 2025-01-08
 
-anatambea is a tool for applying Dust, Odin, and MCState to fit a
+anatembea is a tool for applying Dust, Odin, and MCState to fit a
 semi-stochastic mechanistic disease transmission model to continuously
 collected prevalence data using particle Markov chain Monte Carlo
 (pMCMC). Specifically, this package has been developed to fit a
@@ -56,7 +56,7 @@ be a data frame with at least three columns:
 Like so,
 
 ``` r
-data_slim <- dplyr::select(anatambea::data_sim,month,positive,tested)
+data_slim <- dplyr::select(anatembea::data_sim,month,positive,tested)
 data_slim
 #>       month positive tested
 #> 1  2015.000       57    181
@@ -139,7 +139,7 @@ of actions is as follows:
 5.  Format output.
 
 ``` r
-result <- anatambea::run_pmcmc(data_raw=data_slim,
+result <- anatembea::run_pmcmc(data_raw=data_slim,
                        n_particles=50,
                        proposal_matrix = matrix(1),
                        target_prev = 0.4,
