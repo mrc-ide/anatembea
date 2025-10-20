@@ -299,6 +299,8 @@ compare_u5 <- function(state, observed, pars = NULL) {
   # cat('Observed positive:\n',observed$positive,'\n')
   # cat('Observed tested:\n',observed$tested,'\n')
   # cat('Estimated prevalence:\n',state[1,],'\n')
+  if(is.na(observed$positive)) {
+    return(numeric(length(state[1,])))}
   ll <- dbinom(x = observed$positive,
          size = observed$tested,
          prob = state[1,],
@@ -320,6 +322,8 @@ compare_u5 <- function(state, observed, pars = NULL) {
 #'
 #' @export
 compare_pg <- function(state, observed, pars = NULL) {
+  if(is.na(observed$positive)) {
+    return(numeric(length(state[1,])))}
 
   ll_pg <- dbinom(x = observed$positive,
                   size = observed$tested,
@@ -343,6 +347,8 @@ compare_pg <- function(state, observed, pars = NULL) {
 #'
 #' @export
 compare_mg <- function(state, observed, pars = NULL) {
+  if(is.na(observed$positive)) {
+    return(numeric(length(state[1,])))}
 
   ll_mg <- dbinom(x = observed$positive,
                   size = observed$tested,
@@ -365,7 +371,6 @@ compare_mg <- function(state, observed, pars = NULL) {
 #'
 #' @export
 compare_pgmg <- function(state, observed, pars = NULL) {
-
   ll_pg <- dbinom(x = observed$positive.pg,
                           size = observed$tested.pg,
                           prob = state['prev_pg',],
@@ -375,6 +380,10 @@ compare_pgmg <- function(state, observed, pars = NULL) {
                           size = observed$tested.mg,
                           prob = state['prev_mg',],
                           log = TRUE)
+  if(is.na(observed$positive.pg)) {
+    ll_pg<- numeric(length(state[1,]))}
+  if(is.na(observed$positive.mg)) {
+    ll_mg<- numeric(length(state[1,]))}
 
   return(ll_pg+ll_mg)
 }
