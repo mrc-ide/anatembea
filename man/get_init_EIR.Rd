@@ -12,5 +12,5 @@ get_init_EIR(par, mpl)
 \item{mpl}{Model parameter list}
 }
 \description{
-\code{get_init_EIR} Return an initial EIR based on a user-given target prevalence in <5 yead old children
+\code{get_init_EIR} Return an initial EIR based on a user-given target prevalence in <5 year old children
 }

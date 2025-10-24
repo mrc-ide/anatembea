@@ -8,7 +8,7 @@ run_pmcmc(
   data_raw = NULL,
   data_raw_pg = NULL,
   data_raw_mg = NULL,
-  init_EIR = 10,
+  init_EIR = NULL,
   target_prev = NULL,
   target_prev_group = "u5",
   n_particles = 200,
@@ -44,9 +44,9 @@ to specify historical malaria transmission levels before
 data collection began.}
 
 \item{target_prev}{Return an initial EIR value (from the equilibrium solution),
-given a target prevalence in under 5yos}
+given a target prevalence in under 5yos or 2 to 10 year olds}
 
-\item{target_prev_group}{Age group used for target prevalence}
+\item{target_prev_group}{Age group used for target prevalence ('u5' or '2to10')}
 
 \item{n_particles}{Number of particles to be used in pMCMC (default = 200)}
 

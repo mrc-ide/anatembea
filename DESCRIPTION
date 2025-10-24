@@ -7,7 +7,7 @@ Description: a tool for AnteNatal Assessment of Temporal malaria Epidemiology us
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 URL: https://github.com/mrc-ide/anatambea
 BugReports: https://github.com/mrc-ide/anatambea/issues
 VignetteBuilder: 
