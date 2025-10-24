@@ -10,8 +10,8 @@
 #'                  to specify historical malaria transmission levels before
 #'                  data collection began.
 #' @param target_prev Return an initial EIR value (from the equilibrium solution),
-#'                    given a target prevalence in under 5yos
-#' @param target_prev_group Age group used for target prevalence
+#'                    given a target prevalence in under 5yos or 2 to 10 year olds
+#' @param target_prev_group Age group used for target prevalence ('u5' or '2to10')
 #' @param proposal_matrix Proposal matrix for MCMC parameters
 #' @param max_param Ceiling for proposed stochastic parameter (either EIR or betaa) values (default = 1000)
 #' @param prop_treated Proportion of clinical cases that receive effective treatment (default = 40%)
@@ -40,7 +40,7 @@
 run_pmcmc <- function(data_raw=NULL,
                       data_raw_pg=NULL,
                       data_raw_mg=NULL,
-                      init_EIR = 10,
+                      init_EIR = NULL,
                       target_prev=NULL,
                       target_prev_group='u5',
                       n_particles=200,
@@ -81,6 +81,9 @@ run_pmcmc <- function(data_raw=NULL,
   } else {
     data_raw <- format_na(data_raw)
     avg_prev <- sum(data_raw[1:12,'positive'],na.rm=TRUE)/sum(data_raw[1:12,'tested'],na.rm=TRUE)
+  }
+  if(initial=='informed'&is.null(target_prev)){
+    target_prev <- avg_prev
   }
   Sys.setenv("MC_CORES"=n_threads)
   # ## Modify dates from data
@@ -143,7 +146,7 @@ run_pmcmc <- function(data_raw=NULL,
   volatility <- mcstate::pmcmc_parameter("volatility", rgamma(1,shape = 3.4, rate = 3.1), min = 0,
                                          prior = function(p) dgamma(p, shape = 3.4, rate = 3.1, log = TRUE))
   if(initial == 'informed'){
-    ## Set initial state based on a user-given equilibrium EIR
+    ## Set initial state based on a user-given equilibrium EIR or target prevalence or first year average prevalence
     init_state <- initialise(init_EIR=init_EIR,mpl=mpl_pf,det_model=det_model)
     ### Set pmcmc parameters
     # init_betaa <- mcstate::pmcmc_parameter("init_betaa", rgamma(1,shape = 0.64, rate = 0.057), min = 0,
@@ -259,7 +262,7 @@ run_pmcmc <- function(data_raw=NULL,
                    prev_mg = info$index$prev_preg_sg),
            state = c(prev_05 = info$index$prev,
                      prev_pg = info$index$prev_preg_pg,
-                     prev_sg = info$index$prev_preg_sg,
+                     prev_mg = info$index$prev_preg_sg,
                      EIR = info$index$EIR_out,
                      betaa = info$index$betaa_out,
                      clininc_all = info$index$inc,
@@ -284,7 +287,7 @@ run_pmcmc <- function(data_raw=NULL,
       list(run = c(prev_mg = info$index$prev_preg_sg),
            state = c(prev_05 = info$index$prev,
                      prev_pg = info$index$prev_preg_pg,
-                     prev_sg = info$index$prev_preg_sg,
+                     prev_mg = info$index$prev_preg_sg,
                      EIR = info$index$EIR_out,
                      betaa = info$index$betaa_out,
                      clininc_all = info$index$inc,

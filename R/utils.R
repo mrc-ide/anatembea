@@ -465,12 +465,11 @@ initialise <- function(init_EIR,mpl,det_model){
 
     opt_EIR <- suppressMessages(stats::optim(1,fn=anatembea::get_init_EIR,mpl=mpl,method='Brent',lower=0,upper=2000))
     init_EIR <- opt_EIR$par
-  }
   # else if(!is.null(mpl$target_prev)&mpl$target_prev_group=='u5'){
   #   message('Optimizing initial EIR based on target prevalence in under 5 year olds.')
   #   opt_EIR <- suppressMessages(stats::optim(1,fn=anatembea::get_init_EIR_u5,mpl=mpl,age_group='u5',method='Brent',lower=0,upper=2000))
   #   init_EIR <- opt_EIR$par
-  # }
+  }
   message(paste0('Initial EIR set to ',round(init_EIR,digits=1),'.'))
 
   ## Run equilibrium function
@@ -773,7 +772,7 @@ get_odds_from_prev<-function(prev){
 }
 #' Return an initial EIR based on a user-given target prevalence in <5 yead old children
 #'
-#' \code{get_init_EIR} Return an initial EIR based on a user-given target prevalence in <5 yead old children
+#' \code{get_init_EIR} Return an initial EIR based on a user-given target prevalence in <5 year old children
 #'
 #' @param par An initial EIR value from optim function
 #' @param mpl Model parameter list
@@ -781,7 +780,6 @@ get_odds_from_prev<-function(prev){
 #' @export
 get_init_EIR <- function(par,mpl){
   init_EIR <- par[1]
-  message(paste0('Test 1'))
   equil <- anatembea::equilibrium_init_create_stripped(age_vector = mpl$init_age,
                                                     ft = mpl$prop_treated,
                                                     het_brackets = mpl$het_brackets,
@@ -792,24 +790,6 @@ get_init_EIR <- function(par,mpl){
 
 
   return((equil[[prev_age]] - mpl$target_prev)^2)
-}
-#' Return an initial EIR based on a user-given target prevalence in <5 yead old children
-#'
-#' \code{get_init_EIR_u5} Return an initial EIR based on a user-given target prevalence in <5 yead old children
-#'
-#' @param par An initial EIR value from optim function
-#' @param mpl Model parameter list
-#'
-#' @export
-get_init_EIR_u5 <- function(par,mpl){
-  init_EIR <- par[1]
-  equil <- anatembea::equilibrium_init_create_stripped(age_vector = mpl$init_age,
-                                                    ft = mpl$prop_treated,
-                                                    het_brackets = mpl$het_brackets,
-                                                    init_EIR = init_EIR,
-                                                    model_param_list = mpl)
-
-  return((equil$prev05 - mpl$target_prev)^2)
 }
 #' Return ANC prevalence given prevalence in <5 year old children
 #'
