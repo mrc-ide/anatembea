@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">anatembea</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@
 
       <h1>Using anatembea to Reconstruct Transmission Patterns: A Vignette</h1>
             
-            <h4 data-toc-skip class="date">2025-10-24</h4>
+            <h4 data-toc-skip class="date">2025-11-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/mrc-ide/anatambea/blob/main/vignettes/anatembea_intro.Rmd" class="external-link"><code>vignettes/anatembea_intro.Rmd</code></a></small>
       <div class="d-none name"><code>anatembea_intro.Rmd</code></div>
@@ -65,31 +65,37 @@
 
     
     
-<p>In this vignette, we demonstrate how to use anatembea to reconstruct
-patterns of transmission intensity, seasonality, and malaria burden in
-settings where women are screened for malaria (using either rapid
-diagnostic tests or slide microscopy) with data available at a monthly
-cadence. Later vignettes will explore scenarios involving different data
+<p>In this vignette, we demonstrate how to use <em>anatembea</em> to
+reconstruct patterns of transmission intensity, seasonality, and malaria
+burden from monthly malaria prevalence data in children under 5 years
+old. Later vignettes will demonstrate applying this framework to
+settings where pregnant women are screened for malaria (using either
+rapid diagnostic tests or slide microscopy) with data available at a
+monthly cadence as well as exploring scenarios involving different data
 cadences or stratifications (e.g., by gravidity).</p>
 <div class="section level2">
 <h2 id="understanding-our-approach">Understanding our approach<a class="anchor" aria-label="anchor" href="#understanding-our-approach"></a>
 </h2>
-<p>anatembea is a tool designed to integrate Dust, Odin, and MCState
-frameworks for fitting a semi-stochastic mechanistic disease
-transmission model to continuously collected prevalence data using
-particle Markov chain Monte Carlo (pMCMC). This package specifically
-fits a semi-stochastic version of the ‘malariasimulation’ model to
-monthly malaria prevalence among pregnant women at their first antenatal
-care (ANC1) visit. This vignette walks through a simple example and
-outlines various configurable options and settings.</p>
-<p>In the deterministic version of ‘malariasimulation’, seasonal
-variation in malaria transmission intensity is governed by a Fourier
-series, with coefficients pre-estimated from historical rainfall data.
-While this method provides reasonable seasonal profiles for fitting
-cross-sectional data collected at multi-year intervals (such as data
-from Demographic Health Surveys or Malaria Indicator Surveys), it lacks
-the flexibility required for fitting models to monthly prevalence data
-collected through ANC1.</p>
+<p><em>anatembea</em> is a tool designed to integrate <a href="https://mrc-ide.github.io/dust/" class="external-link"><em>dust</em></a>, <a href="https://mrc-ide.github.io/odin/" class="external-link"><em>odin</em></a>, and <a href="https://mrc-ide.github.io/mcstate" class="external-link"><em>mcstate</em></a> frameworks
+for fitting a semi-stochastic mechanistic disease transmission model to
+continuously collected prevalence data using particle Markov chain Monte
+Carlo (pMCMC). This package specifically fits a semi-stochastic version
+of the <a href="https://mrc-ide.github.io/malariasimulation/" class="external-link"><em>malariasimulation</em></a>
+model to monthly malaria prevalence. While this package was designed for
+analysis of malaria prevalence measured among pregnant women at their
+first antenatal care (ANC1) visit, it can also be fit to monthly malaria
+prevalence in the general population. This vignette walks through a
+simple example fitting to simulated data from children under 5 years old
+and outlines various configurable options and settings.</p>
+<p>In the <a href="https://mrc-ide.github.io/deterministic-malaria-model/index" class="external-link">deterministic
+version</a> of <em>malariasimulation</em>, seasonal variation in malaria
+transmission intensity is governed by a Fourier series, with
+coefficients pre-estimated from historical rainfall data. While this
+method provides reasonable seasonal profiles for fitting cross-sectional
+data collected at multi-year intervals (such as data from Demographic
+Health Surveys or Malaria Indicator Surveys), it lacks the flexibility
+required for fitting models to monthly prevalence data collected through
+ANC1.</p>
 <p>To enhance flexibility, we replaced the deterministic seasonal
 mechanism with a stochastic process. Specifically, mosquito emergence
 rates now vary according to a random-walk process, where the monthly
@@ -102,20 +108,20 @@ trajectories by comparing the observed prevalence with the model’s
 estimated prevalence based on these trajectories. The output is a
 posterior distribution of plausible model trajectories.</p>
 <p>Since the relationship between mosquito emergence rates and infection
-prevalence is encoded within the mechanistic model, anatembea allows us
-to infer trends in key indicators like the entomological inoculation
-rate (EIR) and clinical incidence, which are otherwise challenging to
-measure directly.</p>
+prevalence is encoded within the mechanistic model, <em>anatembea</em>
+allows us to infer trends in key indicators like the entomological
+inoculation rate (EIR) and clinical incidence, which are otherwise
+challenging to measure directly.</p>
 </div>
 <div class="section level2">
 <h2 id="generating-a-test-dataset">Generating a test dataset<a class="anchor" aria-label="anchor" href="#generating-a-test-dataset"></a>
 </h2>
 <p>At its core, our approach leverages the established relationships
 between temporal infection prevalence dynamics, transmission, and
-clinical burden, as defined in the malariasimulation model.
+clinical burden, as defined in the <em>malariasimulation</em> model.
 Consequently, we can validate the inferential framework by generating
-simulated datasets from the model and verifying that anatembea correctly
-recaptures the underlying seasonal dynamics.</p>
+simulated datasets from the model and verifying that <em>anatembea</em>
+correctly recaptures the underlying seasonal dynamics.</p>
 <p>For this vignette, we use a simulation based on rainfall patterns in
 Tanga, Tanzania, where rainfall follows a characteristic bimodal
 pattern. This includes:</p>
@@ -126,11 +132,12 @@ pattern. This includes:</p>
 </ol>
 <p>Bimodal rainfall patterns, such as those in Tanga, often present a
 challenging inferential problem for many algorithms attempting to
-estimate seasonality. However, by applying anatembea, we aim to
+estimate seasonality. However, by applying <em>anatembea</em>, we aim to
 recapture these complex dynamics without supplying the model with prior
 information about the simulation parameters.</p>
-<p>The resulting relationship between malaria prevalence, clinical
-incidence, and EIR in Tanga, Tanzania is illustrated below:</p>
+<p>The resulting relationship between malaria prevalence in children
+under 5, clinical incidence, and EIR in Tanga, Tanzania is illustrated
+below:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -142,55 +149,56 @@ incidence, and EIR in Tanga, Tanzania is illustrated below:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="va">data_true</span> <span class="op">&lt;-</span> <span class="fu">anatembea</span><span class="fu">::</span><span class="va"><a href="../reference/sim_data_tanzania.html">sim_data_tanzania</a></span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mrc-ide/anatambea" class="external-link">anatembea</a></span><span class="op">)</span></span>
+<span><span class="va">data_target</span> <span class="op">&lt;-</span> <span class="fu">anatembea</span><span class="fu">::</span><span class="va"><a href="../reference/sim_data_tanzania.html">sim_data_tanzania</a></span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">month</span><span class="op">&lt;=</span><span class="fu">zoo</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html" class="external-link">as.yearmon</a></span><span class="op">(</span><span class="st">'Dec 2019'</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">prev_plot_true</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">data_true</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">month</span>,y<span class="op">=</span><span class="va">prev_05_true</span><span class="op">)</span>,color<span class="op">=</span><span class="st">"#1F78B4"</span><span class="op">)</span><span class="op">+</span></span>
+<span><span class="va">prev_plot_target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">data_target</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">month</span>,y<span class="op">=</span><span class="va">prev_05_target</span><span class="op">)</span>,color<span class="op">=</span><span class="st">"#1F78B4"</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>limits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.5</span><span class="op">)</span>,expand<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">'RDT Prevalence,\nChildren &lt; 5 years'</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">inc_plot_true</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">data_true</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">month</span>,y<span class="op">=</span><span class="va">clininc_all_true</span><span class="op">)</span>,color<span class="op">=</span><span class="st">"#33A02C"</span><span class="op">)</span><span class="op">+</span></span>
+<span><span class="va">inc_plot_target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">data_target</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">month</span>,y<span class="op">=</span><span class="va">clininc_all_target</span><span class="op">)</span>,color<span class="op">=</span><span class="st">"#33A02C"</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>limits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="cn">NA</span><span class="op">)</span>,expand<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">'Clinical Incidence,\nall ages'</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">eir_plot_true</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">data_true</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">month</span>,y<span class="op">=</span><span class="va">EIR_true</span><span class="op">)</span>,color<span class="op">=</span><span class="st">"#E31A1C"</span><span class="op">)</span><span class="op">+</span></span>
+<span><span class="va">eir_plot_target</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">data_target</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">month</span>,y<span class="op">=</span><span class="va">EIR_target</span><span class="op">)</span>,color<span class="op">=</span><span class="st">"#E31A1C"</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span>expand<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">'EIR'</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/" class="external-link">cowplot</a></span><span class="op">)</span></span>
-<span><span class="va">combined_ggplot_true</span> <span class="op">&lt;-</span> <span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">prev_plot_true</span>,<span class="va">inc_plot_true</span>,<span class="va">eir_plot_true</span>,ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co"># combined_ggplot &lt;- prev_plot+inc_plot+eir_plot+plot_layout(ncol=1)</span></span></code></pre></div>
+<span><span class="va">combined_ggplot_target</span> <span class="op">&lt;-</span> <span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">prev_plot_target</span>,<span class="va">inc_plot_target</span>,<span class="va">eir_plot_target</span>,ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">combined_ggplot_true</span></span></code></pre></div>
-<p><img src="images/unnamed-chunk-2-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="va">combined_ggplot_target</span></span></code></pre></div>
+<p><img src="images/unnamed-chunk-2-1.png" class="r-plt" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="input-data">Input Data<a class="anchor" aria-label="anchor" href="#input-data"></a>
 </h2>
-<p>Data for fitting should be a data frame with at least three
-columns:</p>
+<p>The only user input required for running <em>anatembea</em> is a data
+frame of monthly prevalence with at least three columns:</p>
 <ol style="list-style-type: decimal">
 <li>
 <code>month</code>: Month (here formatted as ‘yearmon’, provided by
 the package ‘zoo’)</li>
 <li>
-<code>tested</code>:The number of individuals tested</li>
+<code>tested</code>: The number of individuals tested</li>
 <li>
 <code>positive</code>: Of those tested, the number of positive test
 results</li>
 </ol>
-<p>In our example “tanga_data_slim” samples in the correct format have
-been generated by sampling binomially from infection prevalence from the
-simulation presented above.</p>
+<p>In our example, the data frame <code>tanga_data_slim</code> was
+generated by sampling binomially from the target infection prevalence of
+the simulation presented above using a monthly sample size of 1000
+children.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tanga_data_slim</span> <span class="op">&lt;-</span> <span class="fu">anatembea</span><span class="fu">::</span><span class="va"><a href="../reference/sim_data_tanzania.html">sim_data_tanzania</a></span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">month</span>,<span class="va">positive</span>,<span class="va">tested</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -221,25 +229,38 @@ parameters that will be fit.</li>
 <li>Run the pMCMC.</li>
 <li>Format output.</li>
 </ol>
+<p>By default, in the absence of other contextual information, we use
+the first year’s prevalence (total number of positives in the first year
+divided by total number of tested in the first year) to calibrate
+initial pre-observation transmission and immunity, minimising potential
+seasonal biases of a shorter calibration window. However,
+<em>anatembea</em> provides functionality for the user to adjust this
+assumption. In the example below, we will assume that, on average before
+data collection, prevalence in children under 5 was 0.4, as specified in
+the option <code>target_prev</code>.</p>
+<p>Other optional user parameters include pMCMC particles/step/chains,
+the maximum mosquito emergence rate, and treated fraction of clinical
+cases. No rainfall or other environmental data are required. For
+available options, see package <a href="https://mrc-ide.github.io/anatembea/reference/run_pmcmc.html" title="run_pmcmc documentation" class="external-link">documentation</a>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">anatembea</span><span class="fu">::</span><span class="fu"><a href="../reference/run_pmcmc.html">run_pmcmc</a></span><span class="op">(</span>data_raw<span class="op">=</span><span class="va">tanga_data_slim</span>,</span>
-<span>                       n_particles<span class="op">=</span><span class="fl">100</span>,</span>
-<span>                       target_prev <span class="op">=</span> <span class="fl">0.4</span>,</span>
-<span>                       n_steps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span>                               target_prev <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>                               n_particles<span class="op">=</span><span class="fl">100</span>,</span>
+<span>                               n_steps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="color: #00BBBB;">R CMD INSTALL</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; * installing *source* package ‘odin.model.stripped.seasonal605da84f’ ...</span></span>
 <span><span class="co">#&gt; ** this is package ‘odin.model.stripped.seasonal605da84f’ version ‘0.0.1’</span></span>
 <span><span class="co">#&gt; ** using staged installation</span></span>
 <span><span class="co">#&gt; ** libs</span></span>
 <span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
-<span><span class="co">#&gt; gcc -std=gnu2x -I"/opt/R/4.5.1/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c odin.c -o odin.o</span></span>
+<span><span class="co">#&gt; gcc -std=gnu2x -I"/opt/R/4.5.2/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c odin.c -o odin.o</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">odin.c:</span> In function ‘<span style="font-weight: bold;">odin_model_stripped_seasonal_initial_conditions</span>’:</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">odin.c:2309:10:</span> <span style="color: #BB00BB; font-weight: bold;">warning: </span>unused variable ‘<span style="font-weight: bold;">t</span>’ [<span style="color: #BB00BB; font-weight: bold;">-Wunused-variable</span>]</span></span>
 <span><span class="co">#&gt;  2309 |   double <span style="color: #BB00BB; font-weight: bold;">t</span> = scalar_real(t_ptr, "t");</span></span>
 <span><span class="co">#&gt;       |          <span style="color: #BB00BB; font-weight: bold;">^</span></span></span>
-<span><span class="co">#&gt; gcc -std=gnu2x -I"/opt/R/4.5.1/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o</span></span>
-<span><span class="co">#&gt; gcc -std=gnu2x -shared -L/opt/R/4.5.1/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal605da84f.so odin.o registration.o -L/opt/R/4.5.1/lib/R/lib -lR</span></span>
-<span><span class="co">#&gt; installing to /tmp/RtmpWZ3BaI/devtools_install_1f632955062a/00LOCK-file1f63315ca4d4/00new/odin.model.stripped.seasonal605da84f/libs</span></span>
+<span><span class="co">#&gt; gcc -std=gnu2x -I"/opt/R/4.5.2/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o</span></span>
+<span><span class="co">#&gt; gcc -std=gnu2x -shared -L/opt/R/4.5.2/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal605da84f.so odin.o registration.o -L/opt/R/4.5.2/lib/R/lib -lR</span></span>
+<span><span class="co">#&gt; installing to /tmp/Rtmp7kM5Oa/devtools_install_21349284644/00LOCK-file21345b782/00new/odin.model.stripped.seasonal605da84f/libs</span></span>
 <span><span class="co">#&gt; ** checking absolute paths in shared objects and dynamic libraries</span></span>
 <span><span class="co">#&gt; * DONE (odin.model.stripped.seasonal605da84f)</span></span>
 <span><span class="co">#&gt; Unused equation: age_flex_length</span></span>
@@ -248,19 +269,7 @@ parameters that will be fit.</li>
 <span><span class="co">#&gt; Initial EIR set to 29.3.</span></span>
 <span><span class="co">#&gt; Running chain 1 / 1</span></span>
 <span><span class="co">#&gt; Finished 10 steps in 48 secs</span></span>
-<span><span class="co">#&gt; Time difference of 53.19219 secs</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">anatembea</span><span class="fu">::</span><span class="fu"><a href="../reference/run_pmcmc.html">run_pmcmc</a></span><span class="op">(</span>data_raw<span class="op">=</span><span class="va">tanga_data_slim</span>,</span>
-<span>                       n_particles<span class="op">=</span><span class="fl">100</span>,</span>
-<span>                       target_prev <span class="op">=</span> <span class="fl">0.4</span>,</span>
-<span>                       n_steps <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>                       comparison <span class="op">=</span> <span class="st">'u5'</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Unused equation: age_flex_length</span></span>
-<span><span class="co">#&gt;  age_flex_length &lt;- user(integer=TRUE) # (line 485)</span></span>
-<span><span class="co">#&gt; Optimizing initial EIR based on target prevalence.</span></span>
-<span><span class="co">#&gt; Initial EIR set to 29.3.</span></span>
-<span><span class="co">#&gt; Running chain 1 / 1</span></span>
-<span><span class="co">#&gt; Finished 10 steps in 53 secs</span></span>
-<span><span class="co">#&gt; Time difference of 57.72693 secs</span></span></code></pre></div>
+<span><span class="co">#&gt; Time difference of 52.99878 secs</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="visualising-output">Visualising output<a class="anchor" aria-label="anchor" href="#visualising-output"></a>
@@ -268,6 +277,9 @@ parameters that will be fit.</li>
 <p>We can then visualise how well the pMCMC fit to the prevalence data,
 as well as unobserved transmission metrics like clinical incidence in
 the entire population and the entomological inoculation rate (EIR).</p>
+<p>First we’ll perform some simple diagnostics, including visualising
+the MCMC trace and calculating the acceptance rate and effective sample
+size.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">measure_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'prev_05'</span>,<span class="st">'clininc_all'</span>,<span class="st">'EIR'</span>,<span class="st">'betaa'</span><span class="op">)</span></span>
 <span><span class="va">months</span> <span class="op">&lt;-</span> <span class="va">tanga_data_slim</span><span class="op">$</span><span class="va">month</span></span>
@@ -276,12 +288,46 @@ the entire population and the entomological inoculation rate (EIR).</p>
 <span><span class="va">num_months</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">history</span><span class="op">[</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">start_month_index</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">num_months</span><span class="op">-</span><span class="va">timelength</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="va">mcmc</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">$</span><span class="va">mcmc</span><span class="op">[</span>,<span class="op">]</span></span>
-<span>  <span class="va">ar</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/rejectionRate.html" class="external-link">rejectionRate</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">mcmc</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">ess</span> <span class="op">&lt;-</span> <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/effectiveSize.html" class="external-link">effectiveSize</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">mcmc</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="va">pars_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mcmc</span><span class="op">)</span></span>
+<span><span class="va">mcmc</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">$</span><span class="va">mcmc</span><span class="op">[</span>,<span class="op">]</span></span>
+<span><span class="va">ar</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">-</span> <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/rejectionRate.html" class="external-link">rejectionRate</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">mcmc</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ess</span> <span class="op">&lt;-</span> <span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/effectiveSize.html" class="external-link">effectiveSize</a></span><span class="op">(</span><span class="fu">coda</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">as.mcmc</a></span><span class="op">(</span><span class="va">mcmc</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">history.dfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">measure_names</span>,<span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">pars_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">mcmc</span><span class="op">)</span></span>
+<span><span class="va">trace_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">pars_list</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu">bayesplot</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/bayesplot/reference/MCMC-traces.html" class="external-link">mcmc_trace</a></span><span class="op">(</span><span class="va">mcmc</span>,pars <span class="op">=</span> <span class="va">x</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span>,<span class="st">' / AR: '</span>,<span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">ar</span><span class="op">[</span><span class="va">x</span><span class="op">]</span>,<span class="fl">3</span><span class="op">)</span>,<span class="st">' / ESS: '</span>,<span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">ess</span><span class="op">[</span><span class="va">x</span><span class="op">]</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">6</span><span class="op">)</span>,</span>
+<span>          axis.title.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="va">trace_plots</span></span>
+<span><span class="co">#&gt; [[1]]</span></span></code></pre></div>
+<p><img src="images/diagnostics-1.png" class="r-plt" width="700"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span></code></pre>
+<p><img src="images/diagnostics-2.png" class="r-plt" width="700"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span></code></pre>
+<p><img src="images/diagnostics-3.png" class="r-plt" width="700"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[4]]</span></span></code></pre>
+<p><img src="images/diagnostics-4.png" class="r-plt" width="700"></p>
+<p>In the example above, our diagnostics don’t look great. We want an
+acceptance rate around 20% and an ESS of at least 200 (the higher the
+better). However, based on some simplified options we’ve given, we are
+unlikely to achieve good performance. Besides the data
+(<code>data_raw</code>) and <code>target_prev</code>, when we ran the
+pMCMC, we also specified two additional options, which set the number of
+particles (<code>n_particles</code>) and the number of MCMC iterations
+(<code>n_steps</code>) for the pMCMC algorithm. We gave lower numbers
+than advised for a real analysis to avoid lengthy computational times
+for this example. A good starting point for an initial run is about 200
+particles and at least 1000 steps (although for a final analysis, the
+number of steps may be above 10,000 to ensure MCMC convergence and
+proper mixing).</p>
+<p>Even though our MCMC doesn’t look great, let’s still visualize the
+model fit to the data:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">history.dfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">measure_names</span>,<span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">history</span><span class="op">[</span><span class="va">x</span>,,<span class="va">start_month_index</span><span class="op">:</span><span class="va">num_months</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>month<span class="op">=</span><span class="va">months</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu">reshape2</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/melt.html" class="external-link">melt</a></span><span class="op">(</span>id<span class="op">=</span><span class="st">'month'</span><span class="op">)</span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -321,9 +367,9 @@ the entire population and the entomological inoculation rate (EIR).</p>
 <span><span class="va">combined_ggplot</span> <span class="op">&lt;-</span> <span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">prev_plot</span>,<span class="va">inc_plot</span>,<span class="va">eir_plot</span>,ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co"># combined_ggplot &lt;- prev_plot+inc_plot+eir_plot+plot_layout(ncol=1)</span></span>
 <span><span class="va">result</span><span class="op">$</span><span class="va">output</span> <span class="op">&lt;-</span> <span class="va">combined_ggplot</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span><span class="op">$</span><span class="va">output</span></span></code></pre></div>
-<p><img src="images/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="images/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -336,7 +382,7 @@ the entire population and the entomological inoculation rate (EIR).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

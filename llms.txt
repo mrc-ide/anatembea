@@ -1,0 +1,88 @@
+# anatembea
+
+*anatembea* is a tool for AnteNatal Assessment of Temporal malaria
+Epidemiology using Mechanistic models, Bayesian Estimation, and
+Analysis, an open-source R package, which translates monthly malaria
+prevalence collected at first antenatal clinic visit (ANC1) into
+seasonal patterns in malaria transmission and clinical cases. Our
+framework is underpinned by an established mechanistic model of malaria
+dynamics, providing the basis for simulating data-informed hypothetical
+scenarios to evaluate the likely impact of alternative intervention
+approaches.
+
+For more information and detail please see our pre-print:
+<https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5184997>
+
+## Installation
+
+You can install the development version of *anatembea* from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("mrc-ide/anatembea")
+library(anatembea)
+```
+
+## Usage
+
+For an example implementation, check out the at
+<https://mrc-ide.github.io/anatembea/articles/anatembea_intro.html>
+
+# Package index
+
+## All functions
+
+- [`admin_match()`](admin_match.md) : match admin region
+- [`check_seasonality()`](check_seasonality.md) : Function that returns
+  values from optional seasonal deterministic model
+- [`compare_ancall()`](compare_ancall.md) : Compare function to
+  calculate likelihood
+- [`compare_flex()`](compare_flex.md) : Compare function to calculate
+  likelihood when fitting to a flexible age group
+- [`compare_mg()`](compare_mg.md) : Compare function to calculate
+  likelihood
+- [`compare_pg()`](compare_pg.md) : Compare function to calculate
+  likelihood
+- [`compare_pgmg()`](compare_pgmg.md) : Compare function to calculate
+  likelihood
+- [`compare_u5()`](compare_u5.md) : Compare function to calculate
+  likelihood
+- [`data_informed()`](data_informed.md) : Transformation function that
+  calculates initial values for stochastic model
+- [`data_process()`](data_process.md) : Process raw data for use in
+  pMCMC
+- [`data_sim`](data_sim.md) : Non-specific simulated data
+- [`equilibrium_init_create_stripped()`](equilibrium_init_create_stripped.md)
+  : Equilibrium initialisation list creation
+- [`format_na()`](format_na.md) : Change missing data to 0s so dbinom
+  function returns 0 (instead of NA)
+- [`get_anc_from_u5()`](get_anc_from_u5.md) : Return ANC prevalence
+  given prevalence in \<5 year old children
+- [`get_init_EIR()`](get_init_EIR.md) : Return an initial EIR based on a
+  user-given target prevalence in \<5 yead old children
+- [`get_odds_from_prev()`](get_odds_from_prev.md) : Converts probability
+  (prevalence) to log-odds
+- [`get_prev_from_log_odds()`](get_prev_from_log_odds.md) : Converts
+  log-odds to probability (or prevalence)
+- [`initialise()`](initialise.md) : Estimate the initial state given
+  user inputs
+- [`load_file()`](load_file.md) : load_file
+- [`match_clean()`](match_clean.md) : match clean
+- [`model_param_list_create()`](model_param_list_create.md) : Model
+  Parameter List Creation
+- [`run_pmcmc()`](run_pmcmc.md) : Run a pMCMC
+- [`sim_data_tanzania`](sim_data_tanzania.md) : Tanzania site simulated
+  data
+- [`test_pf()`](test_pf.md) : Test the particle filter
+- [`transform_init()`](transform_init.md) : transform final state of a
+  seasonal model into the initial state of a stochastic model
+- [`user_informed()`](user_informed.md) : Transformation function that
+  calculates initial values for stochastic model
+
+# Articles
+
+### All vignettes
+
+- [Using anatembea to Reconstruct Transmission Patterns: A
+  Vignette](anatembea_intro.md):
