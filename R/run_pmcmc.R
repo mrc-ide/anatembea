@@ -86,7 +86,6 @@ run_pmcmc <- function(data_raw=NULL,
     target_prev <- avg_prev
   }
   Sys.setenv("MC_CORES"=n_threads)
-  # ## Modify dates from data
   data_proc <- data_process(data_raw=data_raw,start_pf_time=start_pf_time,check_flexibility = check_flexibility)
   data <- data_proc$data
   stochastic_schedule <- data_proc$stochastic_schedule
@@ -96,7 +95,7 @@ run_pmcmc <- function(data_raw=NULL,
   het_brackets <- 5
   lag_rates <- 10
   max_steps <- 1e7
-  atol <- 1e-6 # Probably alright to bring up a bit, maybe to 1e-4 (same with rtol)
+  atol <- 1e-6
   rtol <- 1e-6
   preyears <- 5 #Length of time in years the deterministic seasonal model should run before Jan 1 of the year observations began
 
@@ -128,8 +127,7 @@ run_pmcmc <- function(data_raw=NULL,
     odin_det <- system.file("odin", "odin_model_stripped_matched.R", package = "anatembea")
     det_model <- suppressMessages(odin::odin(odin_det))
   } else if(seasonality_on & is.data.frame(init_EIR)){
-    print('Seasonality not supported with multiple EIR values.')
-    print('Reverting to piece-wise constant EIR.')
+    message('Seasonality not supported with multiple EIR values. Reverting to piece-wise constant EIR.')
     odin_det <- system.file("odin", "odin_model_stripped_matched.R", package = "anatembea")
     det_model <- suppressMessages(odin::odin(odin_det))
   }
@@ -148,14 +146,7 @@ run_pmcmc <- function(data_raw=NULL,
   if(initial == 'informed'){
     ## Set initial state based on a user-given equilibrium EIR or target prevalence or first year average prevalence
     init_state <- initialise(init_EIR=init_EIR,mpl=mpl_pf,det_model=det_model)
-    ### Set pmcmc parameters
-    # init_betaa <- mcstate::pmcmc_parameter("init_betaa", rgamma(1,shape = 0.64, rate = 0.057), min = 0,
-    #                                        prior = function(p) dgamma(p, shape = 0.64, rate = 0.057, log = TRUE))
-
-    # pars = list(init_betaa = init_betaa, volatility = volatility) ## Put pmcmc parameters into a list
     pars = list(volatility = volatility) ## Put pmcmc parameters into a list
-
-
     mcmc_pars <- mcstate::pmcmc_parameters$new(pars,
                                                proposal_matrix,
                                                transform = user_informed(init_state)) ## Calls transformation function based on pmcmc parameters
@@ -405,30 +396,23 @@ run_pmcmc <- function(data_raw=NULL,
                                      ode_control = dust::dust_ode_control(max_steps = max_steps, atol = atol, rtol = rtol,debug_record_step_times=FALSE),
                                      n_threads = n_threads)
 
-  # print('about to set up pmcmc control')
   ### Set pmcmc control
   control <- mcstate::pmcmc_control(
     n_steps,
     save_state = TRUE,
     save_trajectories = TRUE,
     progress = TRUE,
-    n_chains = n_chains, #TO DO: Make parameter to easily change
-    n_workers = n_workers, #TO DO: Make parameter to easily change
+    n_chains = n_chains,
+    n_workers = n_workers,
     n_threads_total = n_threads,
     rerun_every = 50, #Re-runs particle filter about every 50 steps (random distribution, mean=50)
     rerun_random = TRUE)
-  # print('set up pmcmc control')
 
-  # print('parameters set')
-  # print('starting pmcmc run')
-  # print(mpl_pf)
   ### Run pMCMC
   start.time <- Sys.time()
   pmcmc_run <- mcstate::pmcmc(mcmc_pars, pf, control = control)
   run_time <- difftime(Sys.time(),start.time,units = 'secs')
-  print(run_time)
-
-  # if(n_chains > 1) pmcmc_run <- mcstate::pmcmc_combine(pmcmc_run)
+  message(sprintf("pMCMC completed in %.1f seconds", as.numeric(run_time)))
 
   pars <- pmcmc_run$pars
   probs <- pmcmc_run$probabilities
@@ -437,9 +421,9 @@ run_pmcmc <- function(data_raw=NULL,
   ##Save seasonality equilibrium trajectories if checking equilibrium
   seas_pretime <- NULL
   if(seasonality_on & seasonality_check){
-    print('Saving seasonality equilibrium trajectories')
+    message('Saving seasonality equilibrium trajectories')
     # Create list of seasonality trajectories for each set of sampled parameters in the posterior
-    seas_pretime <- parallel::mclapply(1:nrow(pars), function(x) check_seasonality(theta=pars[x,],mpl_pf=mpl_pf,det_model=det_model))
+    seas_pretime <- parallel::mclapply(1:nrow(pars), function(x) check_seasonality(theta=pars[x,],mpl_pf=mpl_pf,season_model=det_model))
   }
   to_return <- list(threads = n_threads,
                     particles = n_particles,

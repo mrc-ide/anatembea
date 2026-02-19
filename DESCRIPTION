@@ -8,10 +8,9 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-URL: https://github.com/mrc-ide/anatambea
-BugReports: https://github.com/mrc-ide/anatambea/issues
-VignetteBuilder: 
-    knitr
+URL: https://github.com/mrc-ide/anatembea
+BugReports: https://github.com/mrc-ide/anatembea/issues
+VignetteBuilder: knitr
 Imports:
     lubridate,
     zoo,
@@ -24,12 +23,14 @@ Imports:
     dplyr,
     statmod,
     stringi,
+    stringr,
     dde,
     RecordLinkage,
     bayesplot,
     ggplot2,
     cowplot,
-    reshape2
+    reshape2,
+    parallel
 Remotes:
     mrc-ide/dust,
     mrc-ide/odin.dust,

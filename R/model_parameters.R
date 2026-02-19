@@ -3,7 +3,7 @@
 #' \code{model_param_list_create} creates list of model parameters to be used
 #' within \code{equilibrium_init_create}
 #'
-#' @param eta Death rate for expoential population distribtuion, i.e. 1/Mean Population Age. Default = 0.0001305
+#' @param eta Death rate for exponential population distribution, i.e. 1/Mean Population Age. Default = 0.0001305
 #' @param rho Age-dependent biting parameter. Default = 0.85
 #' @param a0 Age-dependent biting parameter. Default = 2920
 #' @param sigma2 Variance of the log heterogeneity in biting rates. Default = 1.67
@@ -148,21 +148,10 @@ model_param_list_create <- function(
   cm = 0.05,
   betaL = 21.2,
 
-  # intervention parameters - commented out to remove intervention components
   num_int = 1,
   itn_cov = 0,
   irs_cov = 0,
-  # ITN_IRS_on = -1,
-   DY = 365,
-  # d_ITN0 = 0.41,
-  # r_ITN0 = 0.56,
-  # r_ITN1 = 0.24,
-  # r_IRS0 = 0.6,
-  # d_IRS0 = 1,
-  # irs_half_life =   0.5 * DY,
-  # itn_half_life =   2.64 * DY,
-  # IRS_interval =   1 * DY,
-  # ITN_interval =   3 * DY,
+  DY = 365,
   country = NULL,
   admin_unit = NULL,
   comparison = NULL,
@@ -348,52 +337,6 @@ model_param_list_create <- function(
   mp_list$log_OR_pall_v_c<-intercept_all+gradient_all*(log_odds_child-av_lo_child_all)
 
   mp_list$target_prev <- target_prev
-  # # Fertility parameters
-  # #Gravidity inputs
-  # MZ_multi_rates <- readRDS('MiP-given/MZ_multi_rates.rds')
-  # MZ_multi_rates <- MZ_multi_rates[,-ncol(MZ_multi_rates)]
-  # mp_list$time_brackets<-c(seq(6,420,by=6))
-  # mp_list$time_diffs<-(mp_list$time_brackets[2:length(mp_list$time_brackets)]-mp_list$time_brackets[1:(length(mp_list$time_brackets)-1)])/12*365
-  # mp_list$wane_rates <- 0.001
-  # mp_list$nrates <- length(mp_list$time_diffs)
-  # mp_list$sample_transition_rates <- 1/mp_list$time_diffs
-  # mp_list$sample_rates <- colSums(MZ_multi_rates)
-
-  # ITN/IRS parameters
-  # mp_list$itn_cov <- itn_cov
-  # mp_list$irs_cov <- irs_cov
-
-  # mp_list$num_int <- num_int
-  # Catch all: Not defined the correct number of interventions
-  # if (itn_cov > 0 & num_int == 1){
-  #   stop(message("Incorrect number of interventions for definied ITN coverage. Please ensure you have correctly
-  #                specified the number of interventions."))
-  # }
-  # if (irs_cov > 0 & num_int < 3){
-  #   stop(message("Incorrect number of interventions for definied IRS coverage. Please ensure you have correctly
-  #                specified the number of interventions."))
-  # }
-
-  # Sets start time of coverage
-  # mp_list$ITN_IRS_on <- ITN_IRS_on
-
-  # Sets population split as coverage
-  # {No intervention} {ITN only} {IRS only} {Both ITN and IRS}
-  # cov <- c((1 - itn_cov) * (1 - irs_cov), itn_cov * (1 - irs_cov), (1 - itn_cov) * irs_cov, itn_cov * irs_cov)
-  # cov <- cov[1:mp_list$num_int]
-  # mp_list$cov <- cov
-  #
-  # mp_list$d_ITN0 <- d_ITN0
-  # mp_list$r_ITN0 <- r_ITN0
-  # mp_list$r_ITN1 <- r_ITN1
-  # mp_list$r_IRS0 <- r_IRS0
-  # mp_list$d_IRS0 <- d_IRS0
-  # mp_list$irs_half_life <- irs_half_life
-  # mp_list$itn_half_life <- itn_half_life
-  # mp_list$IRS_interval <- IRS_interval
-  # mp_list$ITN_interval <- ITN_interval
-  # mp_list$irs_loss <- log(2)/mp_list$irs_half_life
-  # mp_list$itn_loss <- log(2)/mp_list$itn_half_life
 
   # check that none of the spare parameters in the extra
   if(sum(!is.na(match(names(extra_param_list),names(mp_list))))!=0){
