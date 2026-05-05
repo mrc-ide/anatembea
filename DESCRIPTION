@@ -29,8 +29,7 @@ Imports:
     bayesplot,
     ggplot2,
     cowplot,
-    reshape2,
-    parallel
+    reshape2
 Remotes:
     mrc-ide/dust,
     mrc-ide/odin.dust,
