@@ -43,7 +43,6 @@
 - [`run_pmcmc()`](run_pmcmc.md) : Run a pMCMC
 - [`sim_data_tanzania`](sim_data_tanzania.md) : Tanzania site simulated
   data
-- [`test_pf()`](test_pf.md) : Test the particle filter
 - [`transform_init()`](transform_init.md) : transform final state of a
   seasonal model into the initial state of a stochastic model
 - [`user_informed()`](user_informed.md) : Transformation function that
