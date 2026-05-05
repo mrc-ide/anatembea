@@ -119,7 +119,7 @@ By default, in the absence of other contextual information, we use the first yea
 
 Other optional user parameters include pMCMC particles/step/chains, the maximum mosquito emergence rate, and treated fraction of clinical cases. No rainfall or other environmental data are required. For available options, see package [documentation](https://mrc-ide.github.io/anatembea/reference/run_pmcmc.html "run_pmcmc documentation").
 
-```{r pmcmc, fig.show='hold',  dependson="data", eval=eval_model}
+```{r pmcmc, fig.show='hold',  dependson="data", eval=identical(Sys.getenv("NOT_CRAN"), "true")}
 result <- anatembea::run_pmcmc(data_raw=tanga_data_slim,
                                target_prev = 0.4,
                                n_particles=100,
@@ -132,7 +132,7 @@ We can then visualise how well the pMCMC fit to the prevalence data, as well as 
 
 First we'll perform some simple diagnostics, including visualising the MCMC trace and calculating the acceptance rate and effective sample size.
 
-```{r diagnostics, eval=eval_model}
+```{r diagnostics, eval=identical(Sys.getenv("NOT_CRAN"), "true")}
 measure_names <- c('prev_05','clininc_all','EIR','betaa')
 months <- tanga_data_slim$month
 
@@ -158,7 +158,7 @@ In the example above, our diagnostics don't look great. We want an acceptance ra
 
 Even though our MCMC doesn't look great, let's still visualize the model fit to the data:
 
-```{r output_process, eval=eval_model}
+```{r output_process, eval=identical(Sys.getenv("NOT_CRAN"), "true")}
 history.dfs <- lapply(measure_names,function(x){
   as.data.frame(t(result$history[x,,start_month_index:num_months]))%>%
         dplyr::mutate(month=months)%>%
@@ -202,7 +202,7 @@ result$output <- combined_ggplot
 
 ```
 
-```{r, fig.show='hold', eval=eval_model}
+```{r, fig.show='hold', eval=identical(Sys.getenv("NOT_CRAN"), "true")}
 result$output
 
 ```

@@ -425,8 +425,8 @@ equilibrium_init_create_stripped <- function(age_vector, het_brackets,
       # deriv(FOI[,,2:lag_rates]) <- (lag_rates/dE)*FOI[i,j,k-1] - (lag_rates/dE)*FOI[i,j,k]
       # FOI[,] <- EIR[i,j] * (if(IB[i,j]==0) b0 else b[i,j])
       b <- mpl$b0 * ((1-mpl$b1)/(1+(IB_eq/mpl$IB0)^mpl$kB)+mpl$b1)
-      FOI_eq11 <- EIR_eq[1,1] * (if(IB_eq[1,1]==0) b0 else b[1,1])
-      FOI_eq23 <- EIR_eq[2,3] * (if(IB_eq[2,3]==0) b0 else b[2,3])
+      FOI_eq11 <- EIR_eq[1,1] * (if(IB_eq[1,1]==0) mpl$b0 else b[1,1])
+      FOI_eq23 <- EIR_eq[2,3] * (if(IB_eq[2,3]==0) mpl$b0 else b[2,3])
 
       ince <- FOIv_eq*Sv_eq*mv0
       betaa <- 0.5*PL_eq/mpl$dPL

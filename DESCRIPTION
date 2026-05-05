@@ -1,9 +1,9 @@
 Package: anatembea
-Title: AnteNatal Assessment of Temporal malaria Epidemiology using Mechanistic models, Bayesian Estimation, and Analysis
+Title: AnteNatal Assessment of Temporal Malaria Epidemiology using Mechanistic Models, Bayesian Estimation, and Analysis
 Version: 1.0
 Authors@R: 
     person("Joseph", "Hicks", email = "joe.tal.hicks@gmail.com", role = c("aut","cre"))
-Description: a tool for AnteNatal Assessment of Temporal malaria Epidemiology using Mechanistic models, Bayesian Estimation, and Analysis, an open-source R package, which attempts to address this problem by translating monthly ANC1 prevalence into seasonal patterns in malaria transmission and clinical cases.
+Description: A tool for AnteNatal Assessment of Temporal Malaria Epidemiology using Mechanistic Models, Bayesian Estimation, and Analysis. This open-source R package attempts to address this problem by translating monthly ANC1 prevalence into seasonal patterns in malaria transmission and clinical cases.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -24,12 +24,7 @@ Imports:
     statmod,
     stringi,
     stringr,
-    dde,
-    RecordLinkage,
-    bayesplot,
-    ggplot2,
-    cowplot,
-    reshape2
+    RecordLinkage
 Remotes:
     mrc-ide/dust,
     mrc-ide/odin.dust,
@@ -40,5 +35,10 @@ LazyData: true
 Suggests: 
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    dde,
+    bayesplot,
+    ggplot2,
+    cowplot,
+    reshape2
 Config/testthat/edition: 3
