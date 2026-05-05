@@ -82,6 +82,7 @@ The resulting relationship between malaria prevalence in children under
 5, clinical incidence, and EIR in Tanga, Tanzania is illustrated below:
 
 ``` r
+
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'
@@ -122,6 +123,7 @@ combined_ggplot_target <- cowplot::plot_grid(prev_plot_target,inc_plot_target,ei
 ```
 
 ``` r
+
 combined_ggplot_target
 ```
 
@@ -142,12 +144,14 @@ sampling binomially from the target infection prevalence of the
 simulation presented above using a monthly sample size of 1000 children.
 
 ``` r
+
 tanga_data_slim <- anatembea::sim_data_tanzania%>%
   dplyr::select(month,positive,tested)%>%
   dplyr::filter(month<=zoo::as.yearmon('Dec 2019'))
 ```
 
 ``` r
+
 head(tanga_data_slim, 5)
 #>      month positive tested
 #> 1 Jan 2017      204   1000
@@ -190,33 +194,34 @@ options, see package
 [documentation](https://mrc-ide.github.io/anatembea/reference/run_pmcmc.html "run_pmcmc documentation").
 
 ``` r
+
 result <- anatembea::run_pmcmc(data_raw=tanga_data_slim,
                                target_prev = 0.4,
                                n_particles=100,
                                n_steps = 10)
 #> ── R CMD INSTALL ───────────────────────────────────────────────────────────────
-#> * installing *source* package ‘odin.model.stripped.seasonal605da84f’ ...
-#> ** this is package ‘odin.model.stripped.seasonal605da84f’ version ‘0.0.1’
+#> * installing *source* package ‘odin.model.stripped.seasonal12e978e6’ ...
+#> ** this is package ‘odin.model.stripped.seasonal12e978e6’ version ‘0.0.1’
 #> ** using staged installation
 #> ** libs
-#> using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’
-#> gcc -std=gnu2x -I"/opt/R/4.5.2/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c odin.c -o odin.o
+#> using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0’
+#> gcc -std=gnu2x -I"/opt/R/4.6.0/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c odin.c -o odin.o
 #> odin.c: In function ‘odin_model_stripped_seasonal_initial_conditions’:
 #> odin.c:2309:10: warning: unused variable ‘t’ [-Wunused-variable]
 #>  2309 |   double t = scalar_real(t_ptr, "t");
 #>       |          ^
-#> gcc -std=gnu2x -I"/opt/R/4.5.2/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o
-#> gcc -std=gnu2x -shared -L/opt/R/4.5.2/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal605da84f.so odin.o registration.o -L/opt/R/4.5.2/lib/R/lib -lR
-#> installing to /tmp/Rtmp7kM5Oa/devtools_install_21349284644/00LOCK-file21345b782/00new/odin.model.stripped.seasonal605da84f/libs
+#> gcc -std=gnu2x -I"/opt/R/4.6.0/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o
+#> gcc -std=gnu2x -shared -L/opt/R/4.6.0/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal12e978e6.so odin.o registration.o -L/opt/R/4.6.0/lib/R/lib -lR
+#> installing to /tmp/Rtmpkzcotj/devtools_install_1e71478f4865/00LOCK-file1e7138750a8c/00new/odin.model.stripped.seasonal12e978e6/libs
 #> ** checking absolute paths in shared objects and dynamic libraries
-#> * DONE (odin.model.stripped.seasonal605da84f)
+#> * DONE (odin.model.stripped.seasonal12e978e6)
 #> Unused equation: age_flex_length
 #>  age_flex_length <- user(integer=TRUE) # (line 485)
 #> Optimizing initial EIR based on target prevalence.
 #> Initial EIR set to 29.3.
 #> Running chain 1 / 1
-#> Finished 10 steps in 48 secs
-#> Time difference of 52.99878 secs
+#> Finished 10 steps in 50 secs
+#> pMCMC completed in 54.8 seconds
 ```
 
 ## Visualising output
@@ -230,6 +235,7 @@ MCMC trace and calculating the acceptance rate and effective sample
 size.
 
 ``` r
+
 measure_names <- c('prev_05','clininc_all','EIR','betaa')
 months <- tanga_data_slim$month
 
@@ -286,6 +292,7 @@ Even though our MCMC doesn’t look great, let’s still visualize the model
 fit to the data:
 
 ``` r
+
 history.dfs <- lapply(measure_names,function(x){
   as.data.frame(t(result$history[x,,start_month_index:num_months]))%>%
         dplyr::mutate(month=months)%>%
@@ -329,6 +336,7 @@ result$output <- combined_ggplot
 ```
 
 ``` r
+
 result$output
 ```
 

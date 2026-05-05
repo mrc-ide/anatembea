@@ -41,7 +41,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/mrc-ide/anatambea/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/mrc-ide/anatembea/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -57,9 +57,9 @@
 
       <h1>Using anatembea to Reconstruct Transmission Patterns: A Vignette</h1>
             
-            <h4 data-toc-skip class="date">2025-11-10</h4>
+            <h4 data-toc-skip class="date">2026-05-05</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/mrc-ide/anatambea/blob/main/vignettes/anatembea_intro.Rmd" class="external-link"><code>vignettes/anatembea_intro.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mrc-ide/anatembea/blob/main/vignettes/anatembea_intro.Rmd" class="external-link"><code>vignettes/anatembea_intro.Rmd</code></a></small>
       <div class="d-none name"><code>anatembea_intro.Rmd</code></div>
     </div>
 
@@ -149,7 +149,7 @@ below:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mrc-ide/anatambea" class="external-link">anatembea</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mrc-ide/anatembea" class="external-link">anatembea</a></span><span class="op">)</span></span>
 <span><span class="va">data_target</span> <span class="op">&lt;-</span> <span class="fu">anatembea</span><span class="fu">::</span><span class="va"><a href="../reference/sim_data_tanzania.html">sim_data_tanzania</a></span><span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">month</span><span class="op">&lt;=</span><span class="fu">zoo</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html" class="external-link">as.yearmon</a></span><span class="op">(</span><span class="st">'Dec 2019'</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -178,7 +178,7 @@ below:</p>
 <span><span class="va">combined_ggplot_target</span> <span class="op">&lt;-</span> <span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html" class="external-link">plot_grid</a></span><span class="op">(</span><span class="va">prev_plot_target</span>,<span class="va">inc_plot_target</span>,<span class="va">eir_plot_target</span>,ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">combined_ggplot_target</span></span></code></pre></div>
-<p><img src="images/unnamed-chunk-2-1.png" class="r-plt" width="700"></p>
+<p><img src="images/unnamed-chunk-2-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="input-data">Input Data<a class="anchor" aria-label="anchor" href="#input-data"></a>
@@ -248,28 +248,28 @@ available options, see package <a href="https://mrc-ide.github.io/anatembea/refe
 <span>                               n_particles<span class="op">=</span><span class="fl">100</span>,</span>
 <span>                               n_steps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="color: #00BBBB;">R CMD INSTALL</span> <span style="color: #00BBBB;">───────────────────────────────────────────────────────────────</span></span></span>
-<span><span class="co">#&gt; * installing *source* package ‘odin.model.stripped.seasonal605da84f’ ...</span></span>
-<span><span class="co">#&gt; ** this is package ‘odin.model.stripped.seasonal605da84f’ version ‘0.0.1’</span></span>
+<span><span class="co">#&gt; * installing *source* package ‘odin.model.stripped.seasonal12e978e6’ ...</span></span>
+<span><span class="co">#&gt; ** this is package ‘odin.model.stripped.seasonal12e978e6’ version ‘0.0.1’</span></span>
 <span><span class="co">#&gt; ** using staged installation</span></span>
 <span><span class="co">#&gt; ** libs</span></span>
-<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0’</span></span>
-<span><span class="co">#&gt; gcc -std=gnu2x -I"/opt/R/4.5.2/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c odin.c -o odin.o</span></span>
+<span><span class="co">#&gt; using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0’</span></span>
+<span><span class="co">#&gt; gcc -std=gnu2x -I"/opt/R/4.6.0/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c odin.c -o odin.o</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">odin.c:</span> In function ‘<span style="font-weight: bold;">odin_model_stripped_seasonal_initial_conditions</span>’:</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">odin.c:2309:10:</span> <span style="color: #BB00BB; font-weight: bold;">warning: </span>unused variable ‘<span style="font-weight: bold;">t</span>’ [<span style="color: #BB00BB; font-weight: bold;">-Wunused-variable</span>]</span></span>
 <span><span class="co">#&gt;  2309 |   double <span style="color: #BB00BB; font-weight: bold;">t</span> = scalar_real(t_ptr, "t");</span></span>
 <span><span class="co">#&gt;       |          <span style="color: #BB00BB; font-weight: bold;">^</span></span></span>
-<span><span class="co">#&gt; gcc -std=gnu2x -I"/opt/R/4.5.2/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o</span></span>
-<span><span class="co">#&gt; gcc -std=gnu2x -shared -L/opt/R/4.5.2/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal605da84f.so odin.o registration.o -L/opt/R/4.5.2/lib/R/lib -lR</span></span>
-<span><span class="co">#&gt; installing to /tmp/Rtmp7kM5Oa/devtools_install_21349284644/00LOCK-file21345b782/00new/odin.model.stripped.seasonal605da84f/libs</span></span>
+<span><span class="co">#&gt; gcc -std=gnu2x -I"/opt/R/4.6.0/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o</span></span>
+<span><span class="co">#&gt; gcc -std=gnu2x -shared -L/opt/R/4.6.0/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal12e978e6.so odin.o registration.o -L/opt/R/4.6.0/lib/R/lib -lR</span></span>
+<span><span class="co">#&gt; installing to /tmp/Rtmpkzcotj/devtools_install_1e71478f4865/00LOCK-file1e7138750a8c/00new/odin.model.stripped.seasonal12e978e6/libs</span></span>
 <span><span class="co">#&gt; ** checking absolute paths in shared objects and dynamic libraries</span></span>
-<span><span class="co">#&gt; * DONE (odin.model.stripped.seasonal605da84f)</span></span>
+<span><span class="co">#&gt; * DONE (odin.model.stripped.seasonal12e978e6)</span></span>
 <span><span class="co">#&gt; Unused equation: age_flex_length</span></span>
 <span><span class="co">#&gt;  age_flex_length &lt;- user(integer=TRUE) # (line 485)</span></span>
 <span><span class="co">#&gt; Optimizing initial EIR based on target prevalence.</span></span>
 <span><span class="co">#&gt; Initial EIR set to 29.3.</span></span>
 <span><span class="co">#&gt; Running chain 1 / 1</span></span>
-<span><span class="co">#&gt; Finished 10 steps in 48 secs</span></span>
-<span><span class="co">#&gt; Time difference of 52.99878 secs</span></span></code></pre></div>
+<span><span class="co">#&gt; Finished 10 steps in 50 secs</span></span>
+<span><span class="co">#&gt; pMCMC completed in 54.8 seconds</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="visualising-output">Visualising output<a class="anchor" aria-label="anchor" href="#visualising-output"></a>
@@ -301,16 +301,16 @@ size.</p>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="va">trace_plots</span></span>
 <span><span class="co">#&gt; [[1]]</span></span></code></pre></div>
-<p><img src="images/diagnostics-1.png" class="r-plt" width="700"></p>
+<p><img src="images/diagnostics-1.png" class="r-plt" alt="" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[2]]</span></span></code></pre>
-<p><img src="images/diagnostics-2.png" class="r-plt" width="700"></p>
+<p><img src="images/diagnostics-2.png" class="r-plt" alt="" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[3]]</span></span></code></pre>
-<p><img src="images/diagnostics-3.png" class="r-plt" width="700"></p>
+<p><img src="images/diagnostics-3.png" class="r-plt" alt="" width="700"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; [[4]]</span></span></code></pre>
-<p><img src="images/diagnostics-4.png" class="r-plt" width="700"></p>
+<p><img src="images/diagnostics-4.png" class="r-plt" alt="" width="700"></p>
 <p>In the example above, our diagnostics don’t look great. We want an
 acceptance rate around 20% and an ESS of at least 200 (the higher the
 better). However, based on some simplified options we’ve given, we are
@@ -369,7 +369,7 @@ model fit to the data:</p>
 <span><span class="va">result</span><span class="op">$</span><span class="va">output</span> <span class="op">&lt;-</span> <span class="va">combined_ggplot</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span><span class="op">$</span><span class="va">output</span></span></code></pre></div>
-<p><img src="images/unnamed-chunk-4-1.png" class="r-plt" width="700"></p>
+<p><img src="images/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
