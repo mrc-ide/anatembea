@@ -9,3 +9,8 @@ test_script.R
 plot_particle_filter.R
 random_walk_explore.R
 docs
+
+# Local R CMD check/build artifacts
+*.Rcheck/
+check-local/
+anatembea_*.tar.gz
