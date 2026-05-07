@@ -25,6 +25,25 @@ devtools::install_github("mrc-ide/anatembea")
 library(anatembea)
 ```
 
+## Reproducibility for accepted ANC pMCMC manuscript
+
+The accepted manuscript analyses were run with R 4.4 using this frozen
+package state. To install the paper version, use:
+
+``` r
+
+remotes::install_github("mrc-ide/anatembea@v1.0-paper")
+```
+
+Key package versions used in the manuscript workflow included:
+
+- `odin` 1.5.11
+- `dust` 0.15.3
+- `mcstate` 0.9.22
+
+Analysis scripts and workflow are available at:
+<https://github.com/jt-hicks/anc_pmcmc_pub>
+
 ## Usage
 
 For an example implementation, check out the at
