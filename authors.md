@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/mrc-ide/anatembea/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/mrc-ide/anatembea/blob/v1.0-paper-zenodo/DESCRIPTION)
 
 Hicks J (2026). *anatembea: AnteNatal Assessment of Temporal Malaria
 Epidemiology using Mechanistic Models, Bayesian Estimation, and
