@@ -27,8 +27,13 @@ library(anatembea)
 
 ## Reproducibility for accepted ANC pMCMC manuscript
 
-The accepted manuscript analyses were run with R 4.4 using this frozen
-package state. To install the paper version, use:
+This package version has been frozen to preserve the exact state used in
+the accepted manuscript, published in **The Lancet Microbe**. The
+accepted manuscript is available from the Spiral Digital Repository:
+<https://hdl.handle.net/10044/1/128591>
+
+The analyses were run with R 4.4 using this frozen package state. To
+install the paper version, use:
 
 ``` r
 
@@ -44,7 +49,9 @@ Key package versions used in the manuscript workflow included:
 Analysis scripts and workflow are available at:
 <https://github.com/jt-hicks/anc_pmcmc_pub>
 
+(Full citation will be added once the article is published online.)
+
 ## Usage
 
-For an example implementation, check out the at
+For an example implementation, check out the vignette at
 <https://mrc-ide.github.io/anatembea/articles/anatembea_intro.html>

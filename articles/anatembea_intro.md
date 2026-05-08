@@ -212,7 +212,7 @@ result <- anatembea::run_pmcmc(data_raw=tanga_data_slim,
 #>       |          ^
 #> gcc -std=gnu2x -I"/opt/R/4.6.0/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o
 #> gcc -std=gnu2x -shared -L/opt/R/4.6.0/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal12e978e6.so odin.o registration.o -L/opt/R/4.6.0/lib/R/lib -lR
-#> installing to /tmp/RtmpBoNtDX/devtools_install_1c5d383214d7/00LOCK-file1c5d5ded5d77/00new/odin.model.stripped.seasonal12e978e6/libs
+#> installing to /tmp/RtmplA75IK/devtools_install_1b935fb9d63a/00LOCK-file1b93730db7c9/00new/odin.model.stripped.seasonal12e978e6/libs
 #> ** checking absolute paths in shared objects and dynamic libraries
 #> * DONE (odin.model.stripped.seasonal12e978e6)
 #> Unused equation: age_flex_length
@@ -220,8 +220,8 @@ result <- anatembea::run_pmcmc(data_raw=tanga_data_slim,
 #> Optimizing initial EIR based on target prevalence.
 #> Initial EIR set to 29.3.
 #> Running chain 1 / 1
-#> Finished 10 steps in 50 secs
-#> pMCMC completed in 54.7 seconds
+#> Finished 10 steps in 48 secs
+#> pMCMC completed in 52.8 seconds
 ```
 
 ## Visualising output
