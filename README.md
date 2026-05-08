@@ -43,4 +43,4 @@ Analysis scripts and workflow are available at:
 
 ## Usage
 
-For an example implementation, check out the at <https://mrc-ide.github.io/anatembea/articles/anatembea_intro.html>
+For an example implementation, check out the vignette at <https://mrc-ide.github.io/anatembea/articles/anatembea_intro.html>
