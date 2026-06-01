@@ -151,8 +151,9 @@ run_pmcmc <- function(data_raw=NULL,
                                                proposal_matrix,
                                                transform = user_informed(init_state)) ## Calls transformation function based on pmcmc parameters
    }else if(initial == 'fitted'){
-    log_init_EIR <- mcstate::pmcmc_parameter("log_init_EIR", rnorm(1, mean = 4, sd = 3),
-                                             prior = function(p) dnorm(p, mean = 4, sd = 3, log = TRUE) + p) #Add p to adjust for sampling on log scale
+    log_init_EIR <- mcstate::pmcmc_parameter("log_init_EIR", rnorm(1, mean = log(10), sd = 1),
+                                              min = log(1e-3), max = log(500),
+                                             prior = function(p) dnorm(p, mean = log(10), sd = 1, log = TRUE)) 
     pars = list(log_init_EIR = log_init_EIR, volatility = volatility) ## Put pmcmc parameters into a list
     mcmc_pars <- mcstate::pmcmc_parameters$new(pars,
                                                proposal_matrix,
