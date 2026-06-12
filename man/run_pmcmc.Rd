@@ -29,7 +29,13 @@ run_pmcmc(
   start_pf_time = 30 * 12,
   particle_tune = FALSE,
   comparison = "u5",
-  initial = "informed"
+  initial = "informed",
+  save_state = FALSE,
+  save_trajectories = FALSE,
+  output_level = c("minimal", "standard", "diagnostic"),
+  ode_atol = 1e-06,
+  ode_rtol = 1e-06,
+  ode_max_steps = 1e+07
 )
 }
 \arguments{
@@ -91,6 +97,22 @@ multigravid pregnant women for comparison with observed ANC data. c('u5','pg','s
 If in a format XtoY, where X and Y are two numbers, will compare to general population between those two ages.}
 
 \item{initial}{Is the initial equilibrium state informed by the user ('user-informed') or by the observed data ('fitted')?}
+
+\item{save_state}{Save pMCMC state values in the returned mcstate object.}
+
+\item{save_trajectories}{Save particle-filter trajectories. Set to \code{TRUE}
+when downstream summaries or plots need \code{history} and \code{times}.}
+
+\item{output_level}{Amount of model output to retain in the particle-filter
+state index. \code{"minimal"} keeps only likelihood inputs, \code{"standard"}
+keeps key fitted prevalence, EIR, betaa, and under-5 incidence
+outputs, and \code{"diagnostic"} preserves the previous full state index.}
+
+\item{ode_atol}{Absolute tolerance passed to \code{dust::dust_ode_control()}.}
+
+\item{ode_rtol}{Relative tolerance passed to \code{dust::dust_ode_control()}.}
+
+\item{ode_max_steps}{Maximum ODE steps passed to \code{dust::dust_ode_control()}.}
 }
 \description{
 This function sets up and runs a particle MCMC that uses Dust, Odin and MCState

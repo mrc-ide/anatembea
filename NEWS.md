@@ -1,5 +1,11 @@
 # anatembea news
 
+## Development version
+
+- Added pMCMC output modes so fitting can avoid saving full state trajectories
+  by default, while `output_level = "diagnostic"`, `save_state = TRUE`, and
+  `save_trajectories = TRUE` preserve the previous full-output behaviour.
+
 ## anatembea 1.0 (accepted manuscript freeze)
 
 - Frozen reproducibility point for the accepted ANC pMCMC manuscript, published in **The Lancet Microbe**.
