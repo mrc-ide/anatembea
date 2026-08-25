@@ -83,9 +83,12 @@ pmcmc_state_index <- function(info, comparison, output_level) {
     return(standard)
   }
 
-  c(standard,
+  c(pmcmc_prevalence_state_index(info, comparison),
+    EIR = info$index$EIR_out,
+    betaa = info$index$betaa_out,
     clininc_all = info$index$inc,
     prev_all = info$index$prevall,
+    clininc_05 = info$index$inc05,
     Dout = info$index$Dout,
     Aout = info$index$Aout,
     Uout = info$index$Uout,
@@ -173,8 +176,10 @@ pmcmc_trajectories <- function(pmcmc_run) {
 #'          the model or 'pgmg' which calculates prevalence in primigravid and
 #'          multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')
 #'          If in a format XtoY, where X and Y are two numbers, will compare to general population between those two ages.
-#' @param save_state Save pMCMC state values in the returned mcstate object.
-#'          Defaults to `TRUE` to preserve the pre-1.1 output behaviour.
+#' @param save_state Control whether the underlying `mcstate` pMCMC run retains
+#'          model state values during execution. The raw `mcstate` object is not
+#'          returned by `run_pmcmc()`. Defaults to `TRUE` to preserve the pre-1.1
+#'          execution behaviour.
 #' @param save_trajectories Save particle-filter trajectories. Set to `TRUE`
 #'          when downstream summaries or plots need `history` and `times`.
 #'          Defaults to `TRUE` to preserve the pre-1.1 output behaviour.

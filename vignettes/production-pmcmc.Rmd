@@ -59,16 +59,17 @@ confirmation_runs <- lapply(seq_len(nrow(confirmation)), function(i) {
     n_particles = confirmation$particles[i],
     n_steps = confirmation$steps[i],
     seed = confirmation$seed[i],
-    output_level = "minimal",
+    output_level = "standard",
     save_state = FALSE,
-    save_trajectories = FALSE
+    save_trajectories = TRUE
   )
 })
 ```
 
-`output_level = "minimal"` is sufficient for parameter convergence checks and
-keeps confirmation objects smaller. A selected trajectory-generating run is
-shown later.
+`output_level = "standard"` retains the key fitted trajectories needed to
+compare chains without retaining the full diagnostic state. Saving trajectories
+costs more memory than the minimal tuning runs, so budget confirmation jobs
+accordingly.
 
 ## 2. Apply burn-in within each chain
 
@@ -85,6 +86,7 @@ chains <- lapply(confirmation_runs, function(result) {
     result$pars[first_keep:nrow(result$pars), parameter_names, drop = FALSE]
   )
 })
+# mcmc.list() accepts a single list whose elements are mcmc objects.
 chains <- coda::mcmc.list(chains)
 ```
 
@@ -228,30 +230,86 @@ them with diagnostics.
 Save raw outputs and a metadata record for every run, including failed runs.
 
 ```{r run-record, eval=FALSE}
-run_record <- list(
-  analysis_id = "tanzania-u5-example",
-  chain = 1L,
+production_arguments <- list(
+  comparison = "u5",
+  initial = "fitted",
+  check_flexibility = TRUE,
+  proposal_matrix = production_covariance,
+  n_particles = production$particles[1],
+  n_steps = production$steps[1],
+  n_threads = 4,
+  n_chains = 1,
+  n_workers = 1,
   seed = production$seed[1],
-  input_hash = tools::md5sum("data/analysis-input.csv"),
-  git_commit = system2("git", c("rev-parse", "HEAD"), stdout = TRUE),
-  package_versions = vapply(
-    c("anatembea", "mcstate", "dust", "odin.dust", "odin"),
-    function(x) as.character(utils::packageVersion(x)),
-    character(1)
-  ),
-  run_arguments = list(
-    particles = production$particles[1],
-    steps = production$steps[1],
-    proposal_covariance = production_covariance,
-    output_level = "standard",
-    save_trajectories = TRUE
-  ),
-  scheduler = list(job_id = Sys.getenv("SLURM_JOB_ID", unset = NA_character_)),
-  result = list(
-    runtime = production_run_1$run_time,
-    exit_state = "completed"
-  )
+  prop_treated = 0.4,
+  seasonality_on = TRUE,
+  output_level = "standard",
+  save_state = FALSE,
+  save_trajectories = TRUE,
+  ode_atol = 1e-6,
+  ode_rtol = 1e-6,
+  ode_max_steps = 1e7
 )
+
+run_with_record <- function(data, arguments, input_path = NULL) {
+  started_at <- Sys.time()
+  captured_warnings <- character()
+  error_message <- NULL
+
+  result <- withCallingHandlers(
+    tryCatch(
+      do.call(anatembea::run_pmcmc, c(list(data_raw = data), arguments)),
+      error = function(e) {
+        error_message <<- conditionMessage(e)
+        NULL
+      }
+    ),
+    warning = function(w) {
+      captured_warnings <<- c(captured_warnings, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+
+  finished_at <- Sys.time()
+  exit_state <- if (is.null(error_message)) "completed" else "failed"
+
+  record <- list(
+    analysis_id = "tanzania-u5-example",
+    input_hash = if (is.null(input_path)) NA_character_ else
+      unname(tools::md5sum(input_path)),
+    git_commit = tryCatch(
+      system2("git", c("rev-parse", "HEAD"), stdout = TRUE),
+      error = function(e) NA_character_
+    ),
+    package_versions = vapply(
+      c("anatembea", "mcstate", "dust", "odin.dust", "odin"),
+      function(x) as.character(utils::packageVersion(x)),
+      character(1)
+    ),
+    run_arguments = arguments,
+    scheduler = list(
+      job_id = Sys.getenv("SLURM_JOB_ID", unset = NA_character_)
+    ),
+    result = list(
+      started_at = started_at,
+      finished_at = finished_at,
+      runtime = if (is.null(result)) NA else result$run_time,
+      exit_state = exit_state,
+      error = error_message,
+      warnings = captured_warnings
+    )
+  )
+
+  list(result = result, record = record)
+}
+
+recorded_run <- run_with_record(analysis_data, production_arguments)
+saveRDS(recorded_run$record, "chain-1-run-record.rds")
+
+if (identical(recorded_run$record$result$exit_state, "failed")) {
+  stop(recorded_run$record$result$error)
+}
+production_run_1 <- recorded_run$result
 ```
 
 Also retain warnings, errors, raw samples, trajectories, diagnostics, reviewer

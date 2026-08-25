@@ -98,8 +98,10 @@ If in a format XtoY, where X and Y are two numbers, will compare to general popu
 
 \item{initial}{Is the initial equilibrium state informed by the user ('user-informed') or by the observed data ('fitted')?}
 
-\item{save_state}{Save pMCMC state values in the returned mcstate object.
-Defaults to \code{TRUE} to preserve the pre-1.1 output behaviour.}
+\item{save_state}{Control whether the underlying \code{mcstate} pMCMC run retains
+model state values during execution. The raw \code{mcstate} object is not
+returned by \code{run_pmcmc()}. Defaults to \code{TRUE} to preserve the pre-1.1
+execution behaviour.}
 
 \item{save_trajectories}{Save particle-filter trajectories. Set to \code{TRUE}
 when downstream summaries or plots need \code{history} and \code{times}.

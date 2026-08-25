@@ -39,7 +39,7 @@ Key package versions used in the manuscript workflow included:
 Analysis scripts and workflow are available at:
 <https://github.com/jt-hicks/anc_pmcmc_pub>
 
-(Full citation will be added once the article is published online.)
+
 
 ## Usage
 

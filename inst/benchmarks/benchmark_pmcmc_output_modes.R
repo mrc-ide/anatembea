@@ -3,16 +3,17 @@
 # This script is intentionally not part of package checks. Run it from the
 # package root after installing development dependencies.
 
-library(anatembea)
-
 if (requireNamespace("pkgload", quietly = TRUE) && file.exists("DESCRIPTION")) {
   pkgload::load_all(".")
+} else {
+  library(anatembea)
 }
 
 make_benchmark_data <- function() {
-  anatembea::sim_data_tanzania |>
-    dplyr::select(month, positive, tested) |>
-    dplyr::filter(month <= zoo::as.yearmon("Dec 2019"))
+  dplyr::filter(
+    dplyr::select(anatembea::sim_data_tanzania, month, positive, tested),
+    month <= zoo::as.yearmon("Dec 2019")
+  )
 }
 
 run_mode <- function(label, save_state, save_trajectories, output_level) {

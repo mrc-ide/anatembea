@@ -42,9 +42,10 @@ least these columns:
 The package includes simulated data that we can use throughout this series.
 
 ```{r example-data}
-analysis_data <- anatembea::sim_data_tanzania |>
-  dplyr::select(month, positive, tested) |>
-  dplyr::filter(month <= zoo::as.yearmon("Dec 2019"))
+analysis_data <- dplyr::filter(
+  dplyr::select(anatembea::sim_data_tanzania, month, positive, tested),
+  month <= zoo::as.yearmon("Dec 2019")
+)
 
 head(analysis_data, 4)
 ```
@@ -81,9 +82,17 @@ validate_monthly_prevalence <- function(data) {
   }
 
   observed <- !is.na(data$positive)
-  invalid_counts <- data$positive[observed] < 0 |
-    data$tested[observed] < 0 |
-    data$positive[observed] > data$tested[observed]
+  positive <- data$positive[observed]
+  tested <- data$tested[observed]
+
+  if (any(!is.finite(c(positive, tested)))) {
+    stop("Observed counts must be finite.")
+  }
+  if (any(positive != floor(positive) | tested != floor(tested))) {
+    stop("Observed counts must be whole numbers.")
+  }
+
+  invalid_counts <- positive < 0 | tested < 0 | positive > tested
   if (any(invalid_counts)) {
     stop("Counts must satisfy 0 <= positive <= tested.")
   }
@@ -101,6 +110,13 @@ validate_monthly_prevalence <- function(data) {
 }
 
 validate_monthly_prevalence(analysis_data)
+
+invalid_example <- analysis_data[1, ]
+invalid_example$positive <- Inf
+try(validate_monthly_prevalence(invalid_example))
+
+invalid_example$positive <- 1.5
+try(validate_monthly_prevalence(invalid_example))
 ```
 
 A gap is a month with no row; a missing observation is a row with both counts
@@ -110,8 +126,10 @@ real, but they often reveal altered reporting systems, duplicated extracts, or
 changes in the population being tested.
 
 ```{r data-plot, fig.height=4, fig.width=7}
-plot_data <- analysis_data |>
-  dplyr::mutate(prevalence = positive / tested)
+plot_data <- dplyr::mutate(
+  analysis_data,
+  prevalence = positive / tested
+)
 
 ggplot2::ggplot(plot_data, ggplot2::aes(month, prevalence)) +
   ggplot2::geom_line(colour = "#1F78B4") +

@@ -86,10 +86,12 @@ test_that("pmcmc output modes build the expected state indexes", {
                     names(standard$state)))
   expect_false("Dout" %in% names(standard$state))
 
-  expect_true(all(c("Dout", "Aout", "Uout", "p_det_out", "phi_out",
-                    "b_out", "IC_out", "IB_out", "ID_out", "spz_rate",
-                    "eff_moz_pop", "moz2human_ratio") %in%
-                    names(diagnostic$state)))
+  expect_named(diagnostic$state, c(
+    "prev_05", "prev_pg", "prev_sg", "prev_mg", "EIR", "betaa",
+    "clininc_all", "prev_all", "clininc_05", "Dout", "Aout", "Uout",
+    "p_det_out", "phi_out", "b_out", "IC_out", "IB_out", "ID_out",
+    "spz_rate", "eff_moz_pop", "moz2human_ratio"
+  ))
 })
 
 test_that("pmcmc trajectory extraction handles unsaved trajectories", {

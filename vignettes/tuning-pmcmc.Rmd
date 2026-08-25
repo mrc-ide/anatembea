@@ -140,8 +140,8 @@ independent seeds at particle counts such as 50, 100, 200, and 400. Record:
 The current high-level `run_pmcmc()` interface performs a complete pMCMC rather
 than exposing a standalone fixed-parameter likelihood replicate. Consequently,
 this check requires a project-specific particle-filter wrapper built from the
-same model specification. Do not substitute a single short MCMC chain and call
-its changing likelihood values likelihood replicates.
+same model specification. Do not treat changing likelihood values from a
+single short MCMC chain as independent likelihood replicates.
 
 A useful results layout is:
 
@@ -202,6 +202,11 @@ pilot_covariance <- (pilot_covariance + t(pilot_covariance)) / 2
 # Correct only small numerical defects; do not hide an unidentified parameter.
 eigen_floor <- 1e-8
 decomp <- eigen(pilot_covariance, symmetric = TRUE)
+if (any(decomp$values <= 0)) {
+  stop(
+    "The pilot covariance has a non-positive direction; obtain more moving draws."
+  )
+}
 decomp$values <- pmax(decomp$values, eigen_floor)
 pilot_covariance <- decomp$vectors %*%
   diag(decomp$values) %*% t(decomp$vectors)
@@ -265,7 +270,8 @@ Summarize every parameter, not just the best-looking one:
 ```{r summarize-scales, eval=FALSE}
 summarize_run <- function(result, scale) {
   chain <- coda::as.mcmc(result$pars[, parameter_names, drop = FALSE])
-  acceptance <- 1 - coda::rejectionRate(chain)
+  rejection_rate <- coda::rejectionRate(chain)
+  acceptance <- 1 - rejection_rate
   ess <- coda::effectiveSize(chain)
   hours <- as.numeric(result$run_time, units = "hours")
 
@@ -273,9 +279,9 @@ summarize_run <- function(result, scale) {
     scale = scale,
     parameter = names(ess),
     acceptance = acceptance[names(ess)],
+    rejection_rate = rejection_rate[names(ess)],
     ess = as.numeric(ess),
-    ess_per_hour = as.numeric(ess) / hours,
-    repeated_proportion = 1 - acceptance[names(ess)]
+    ess_per_hour = as.numeric(ess) / hours
   )
 }
 
@@ -288,14 +294,41 @@ scale_summary
 
 Rank successful trials primarily by their minimum ESS per hour across fitted
 parameters. Acceptance around 0.25--0.45 is a useful guide for this
-low-dimensional random-walk proposal, but trace movement, stable trajectories,
-and absence of failures matter more than hitting a particular number. R-hat is
-not informative for a single short chain.
+low-dimensional random-walk proposal, but trace movement and absence of
+failures matter more than hitting a particular number. R-hat is not informative
+for a single short chain.
 
-If every scale performs poorly, make one targeted adjustment: improve the
-covariance estimate, alter the grid, increase particles if the likelihood is
-noisy, or investigate model stiffness. Repeatedly increasing chain length
-without a diagnosis is not tuning.
+The minimal scale trials do not contain fitted trajectories. After selecting a
+provisional multiplier from their parameter diagnostics, run one explicit
+trajectory check before confirmation. Here `selected_scale` is the multiplier
+chosen from `scale_summary`.
+
+```{r provisional-trajectory-check, eval=FALSE}
+provisional_check <- anatembea::run_pmcmc(
+  data_raw = analysis_data,
+  comparison = "u5",
+  initial = "fitted",
+  check_flexibility = TRUE,
+  proposal_matrix = selected_scale * pilot_covariance,
+  n_particles = 100,
+  n_steps = 500,
+  seed = 3201L,
+  output_level = "standard",
+  save_state = FALSE,
+  save_trajectories = TRUE
+)
+
+stopifnot(
+  !is.null(provisional_check$history),
+  !is.null(provisional_check$times)
+)
+```
+
+Review the fitted prevalence, EIR, emergence, and incidence trajectories for
+finite values and scientific plausibility. If every scale performs poorly,
+make one targeted adjustment: improve the covariance estimate, alter the grid,
+increase particles if the likelihood is noisy, or investigate model stiffness.
+Repeatedly increasing chain length without a diagnosis is not tuning.
 
 ## Gate: ready for confirmation?
 
@@ -304,7 +337,8 @@ Freeze a provisional configuration only when you have recorded:
 - the particle-count evidence;
 - the finite, symmetric, positive-definite covariance and parameter order;
 - the selected covariance multiplier;
-- acceptance, repeated states, ESS/hour, traces, and failures for every trial;
+- acceptance, rejection rates, ESS/hour, traces, and failures for every trial;
+- the provisional fitted-trajectory check;
 - all seeds and runtimes; and
 - a reason for selecting the winning configuration.
 
