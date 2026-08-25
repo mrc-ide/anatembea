@@ -103,3 +103,14 @@ test_that("pmcmc trajectory extraction handles unsaved trajectories", {
   expect_equal(with_trajectories$times, c(1, 2))
   expect_equal(with_trajectories$history, matrix(1:4, nrow = 2))
 })
+
+test_that("run_pmcmc preserves the historical full-output defaults", {
+  defaults <- formals(run_pmcmc)
+
+  expect_identical(defaults$save_state, TRUE)
+  expect_identical(defaults$save_trajectories, TRUE)
+  expect_identical(
+    eval(defaults$output_level),
+    c("diagnostic", "standard", "minimal")
+  )
+})

@@ -1,12 +1,17 @@
-# anatembea news
+# anatembea 1.1.0
 
-## Development version
+- Added opt-in pMCMC output modes that reduce runtime and memory use when full
+  state trajectories are not required. Existing calls retain the previous
+  full-output behaviour by default; use `output_level = "minimal"`,
+  `save_state = FALSE`, and `save_trajectories = FALSE` for the smallest output.
+- Bounded fitted `log_init_EIR` proposals and corrected their prior
+  specification, improving the reliability of `initial = "fitted"` runs.
+- Added staged articles for preparing data and configuration, tuning pMCMC,
+  and assessing confirmation and production chains.
+- Added user controls for ODE absolute tolerance, relative tolerance, and the
+  maximum number of ODE steps.
 
-- Added pMCMC output modes so fitting can avoid saving full state trajectories
-  by default, while `output_level = "diagnostic"`, `save_state = TRUE`, and
-  `save_trajectories = TRUE` preserve the previous full-output behaviour.
-
-## anatembea 1.0 (accepted manuscript freeze)
+# anatembea 1.0 (accepted manuscript freeze)
 
 - Frozen reproducibility point for the accepted ANC pMCMC manuscript, published in **The Lancet Microbe**.
 - Accepted manuscript: <https://hdl.handle.net/10044/1/128591> (Spiral Digital Repository).

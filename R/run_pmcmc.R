@@ -174,12 +174,17 @@ pmcmc_trajectories <- function(pmcmc_run) {
 #'          multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')
 #'          If in a format XtoY, where X and Y are two numbers, will compare to general population between those two ages.
 #' @param save_state Save pMCMC state values in the returned mcstate object.
+#'          Defaults to `TRUE` to preserve the pre-1.1 output behaviour.
 #' @param save_trajectories Save particle-filter trajectories. Set to `TRUE`
 #'          when downstream summaries or plots need `history` and `times`.
+#'          Defaults to `TRUE` to preserve the pre-1.1 output behaviour.
 #' @param output_level Amount of model output to retain in the particle-filter
 #'          state index. `"minimal"` keeps only likelihood inputs, `"standard"`
 #'          keeps key fitted prevalence, EIR, betaa, and under-5 incidence
-#'          outputs, and `"diagnostic"` preserves the previous full state index.
+#'          outputs, and `"diagnostic"` preserves the previous full state index
+#'          and is the default for backward compatibility.
+#' @importFrom stats dgamma dnorm rgamma rnorm
+#'
 #' @param ode_atol Absolute tolerance passed to `dust::dust_ode_control()`.
 #' @param ode_rtol Relative tolerance passed to `dust::dust_ode_control()`.
 #' @param ode_max_steps Maximum ODE steps passed to `dust::dust_ode_control()`.
@@ -213,9 +218,9 @@ run_pmcmc <- function(data_raw=NULL,
                       particle_tune = FALSE,
                       comparison = 'u5',
                       initial = 'informed',
-                      save_state = FALSE,
-                      save_trajectories = FALSE,
-                      output_level = c("minimal", "standard", "diagnostic"),
+                      save_state = TRUE,
+                      save_trajectories = TRUE,
+                      output_level = c("diagnostic", "standard", "minimal"),
                       ode_atol = 1e-6,
                       ode_rtol = 1e-6,
                       ode_max_steps = 1e7){

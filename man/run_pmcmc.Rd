@@ -30,9 +30,9 @@ run_pmcmc(
   particle_tune = FALSE,
   comparison = "u5",
   initial = "informed",
-  save_state = FALSE,
-  save_trajectories = FALSE,
-  output_level = c("minimal", "standard", "diagnostic"),
+  save_state = TRUE,
+  save_trajectories = TRUE,
+  output_level = c("diagnostic", "standard", "minimal"),
   ode_atol = 1e-06,
   ode_rtol = 1e-06,
   ode_max_steps = 1e+07
@@ -98,15 +98,18 @@ If in a format XtoY, where X and Y are two numbers, will compare to general popu
 
 \item{initial}{Is the initial equilibrium state informed by the user ('user-informed') or by the observed data ('fitted')?}
 
-\item{save_state}{Save pMCMC state values in the returned mcstate object.}
+\item{save_state}{Save pMCMC state values in the returned mcstate object.
+Defaults to \code{TRUE} to preserve the pre-1.1 output behaviour.}
 
 \item{save_trajectories}{Save particle-filter trajectories. Set to \code{TRUE}
-when downstream summaries or plots need \code{history} and \code{times}.}
+when downstream summaries or plots need \code{history} and \code{times}.
+Defaults to \code{TRUE} to preserve the pre-1.1 output behaviour.}
 
 \item{output_level}{Amount of model output to retain in the particle-filter
 state index. \code{"minimal"} keeps only likelihood inputs, \code{"standard"}
 keeps key fitted prevalence, EIR, betaa, and under-5 incidence
-outputs, and \code{"diagnostic"} preserves the previous full state index.}
+outputs, and \code{"diagnostic"} preserves the previous full state index
+and is the default for backward compatibility.}
 
 \item{ode_atol}{Absolute tolerance passed to \code{dust::dust_ode_control()}.}
 

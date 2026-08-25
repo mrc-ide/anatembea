@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{get_init_EIR}
 \alias{get_init_EIR}
-\title{Return an initial EIR based on a user-given target prevalence in <5 yead old children}
+\title{Return an initial EIR based on a user-given target prevalence in <5 year old children}
 \usage{
 get_init_EIR(par, mpl)
 }
