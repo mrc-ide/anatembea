@@ -1,3 +1,143 @@
+pmcmc_run_index <- function(info, comparison) {
+  if (comparison == "u5") {
+    c(prev = info$index$prev)
+  } else if (comparison == "pg") {
+    c(prev_pg = info$index$prev_preg_pg)
+  } else if (comparison == "pgmg") {
+    c(prev_pg = info$index$prev_preg_pg,
+      prev_mg = info$index$prev_preg_mg)
+  } else if (comparison == "pgsg") {
+    c(prev_pg = info$index$prev_preg_pg,
+      prev_mg = info$index$prev_preg_sg)
+  } else if (comparison == "sg") {
+    c(prev_mg = info$index$prev_preg_sg)
+  } else if (comparison == "mg") {
+    c(prev_mg = info$index$prev_preg_mg)
+  } else if (comparison == "ancall") {
+    c(prev_anc_all = info$index$prev_preg_all)
+  } else if (grepl("\\d+to\\d+", comparison)) {
+    c(prev_flex = info$index$prev_flex)
+  } else {
+    stop("Unknown comparison: ", comparison)
+  }
+}
+
+pmcmc_prevalence_state_index <- function(info, comparison) {
+  if (comparison == "u5") {
+    c(prev_05 = info$index$prev,
+      prev_flex = info$index$prev_flex)
+  } else if (comparison == "pg") {
+    c(prev_05 = info$index$prev,
+      prev_pg = info$index$prev_preg_pg,
+      prev_sg = info$index$prev_preg_sg,
+      prev_mg = info$index$prev_preg_mg)
+  } else if (comparison == "pgmg") {
+    c(prev_05 = info$index$prev,
+      prev_pg = info$index$prev_preg_pg,
+      prev_sg = info$index$prev_preg_sg,
+      prev_mg = info$index$prev_preg_mg)
+  } else if (comparison == "pgsg") {
+    c(prev_05 = info$index$prev,
+      prev_pg = info$index$prev_preg_pg,
+      prev_mg = info$index$prev_preg_sg,
+      prev_mg_mg = info$index$prev_preg_mg)
+  } else if (comparison == "sg") {
+    c(prev_05 = info$index$prev,
+      prev_pg = info$index$prev_preg_pg,
+      prev_mg = info$index$prev_preg_sg,
+      prev_mg_mg = info$index$prev_preg_mg)
+  } else if (comparison == "mg") {
+    c(prev_05 = info$index$prev,
+      prev_pg = info$index$prev_preg_pg,
+      prev_sg = info$index$prev_preg_sg,
+      prev_mg = info$index$prev_preg_mg)
+  } else if (comparison == "ancall") {
+    c(prev_05 = info$index$prev,
+      prev_pg = info$index$prev_preg_pg,
+      prev_sg = info$index$prev_preg_sg,
+      prev_mg = info$index$prev_preg_mg,
+      prev_anc_all = info$index$prev_preg_all)
+  } else if (grepl("\\d+to\\d+", comparison)) {
+    c(prev_05 = info$index$prev,
+      prev_flex = info$index$prev_flex,
+      prev_pg = info$index$prev_preg_pg,
+      prev_sg = info$index$prev_preg_sg,
+      prev_mg = info$index$prev_preg_mg,
+      prev_anc_all = info$index$prev_preg_all)
+  } else {
+    stop("Unknown comparison: ", comparison)
+  }
+}
+
+pmcmc_state_index <- function(info, comparison, output_level) {
+  if (output_level == "minimal") {
+    return(pmcmc_run_index(info, comparison))
+  }
+
+  standard <- c(pmcmc_prevalence_state_index(info, comparison),
+                EIR = info$index$EIR_out,
+                betaa = info$index$betaa_out,
+                clininc_05 = info$index$inc05)
+
+  if (output_level == "standard") {
+    return(standard)
+  }
+
+  c(pmcmc_prevalence_state_index(info, comparison),
+    EIR = info$index$EIR_out,
+    betaa = info$index$betaa_out,
+    clininc_all = info$index$inc,
+    prev_all = info$index$prevall,
+    clininc_05 = info$index$inc05,
+    Dout = info$index$Dout,
+    Aout = info$index$Aout,
+    Uout = info$index$Uout,
+    p_det_out = info$index$p_det_out,
+    phi_out = info$index$phi_out,
+    b_out = info$index$b_out,
+    IC_out = info$index$IC_out,
+    IB_out = info$index$IB_out,
+    ID_out = info$index$ID_out,
+    spz_rate = info$index$spz_rate,
+    eff_moz_pop = info$index$eff_moz_pop,
+    moz2human_ratio = info$index$moz2human_ratio)
+}
+
+make_pmcmc_index <- function(comparison, output_level) {
+  force(comparison)
+  force(output_level)
+  function(info) {
+    list(run = pmcmc_run_index(info, comparison),
+         state = pmcmc_state_index(info, comparison, output_level))
+  }
+}
+
+pmcmc_compare_function <- function(comparison) {
+  if (comparison == "u5") {
+    compare_u5
+  } else if (comparison == "pg") {
+    compare_pg
+  } else if (comparison == "pgmg" || comparison == "pgsg") {
+    compare_pgmg
+  } else if (comparison == "sg" || comparison == "mg") {
+    compare_mg
+  } else if (comparison == "ancall") {
+    compare_ancall
+  } else if (grepl("\\d+to\\d+", comparison)) {
+    compare_flex
+  } else {
+    stop("Unknown comparison: ", comparison)
+  }
+}
+
+pmcmc_trajectories <- function(pmcmc_run) {
+  if (is.null(pmcmc_run$trajectories)) {
+    return(list(times = NULL, history = NULL))
+  }
+  list(times = pmcmc_run$trajectories$time,
+       history = pmcmc_run$trajectories$state)
+}
+
 #' Run a pMCMC
 #'
 #' This function sets up and runs a particle MCMC that uses Dust, Odin and MCState
@@ -36,6 +176,23 @@
 #'          the model or 'pgmg' which calculates prevalence in primigravid and
 #'          multigravid pregnant women for comparison with observed ANC data. c('u5','pg','sg','mg','pgmg','pgsg','ancall')
 #'          If in a format XtoY, where X and Y are two numbers, will compare to general population between those two ages.
+#' @param save_state Control whether the underlying `mcstate` pMCMC run retains
+#'          model state values during execution. The raw `mcstate` object is not
+#'          returned by `run_pmcmc()`. Defaults to `TRUE` to preserve the pre-1.1
+#'          execution behaviour.
+#' @param save_trajectories Save particle-filter trajectories. Set to `TRUE`
+#'          when downstream summaries or plots need `history` and `times`.
+#'          Defaults to `TRUE` to preserve the pre-1.1 output behaviour.
+#' @param output_level Amount of model output to retain in the particle-filter
+#'          state index. `"minimal"` keeps only likelihood inputs, `"standard"`
+#'          keeps key fitted prevalence, EIR, betaa, and under-5 incidence
+#'          outputs, and `"diagnostic"` preserves the previous full state index
+#'          and is the default for backward compatibility.
+#' @importFrom stats dgamma dnorm rgamma rnorm
+#'
+#' @param ode_atol Absolute tolerance passed to `dust::dust_ode_control()`.
+#' @param ode_rtol Relative tolerance passed to `dust::dust_ode_control()`.
+#' @param ode_max_steps Maximum ODE steps passed to `dust::dust_ode_control()`.
 #' @export
 run_pmcmc <- function(data_raw=NULL,
                       data_raw_pg=NULL,
@@ -65,7 +222,14 @@ run_pmcmc <- function(data_raw=NULL,
                       start_pf_time = 30*12,
                       particle_tune = FALSE,
                       comparison = 'u5',
-                      initial = 'informed'){
+                      initial = 'informed',
+                      save_state = TRUE,
+                      save_trajectories = TRUE,
+                      output_level = c("diagnostic", "standard", "minimal"),
+                      ode_atol = 1e-6,
+                      ode_rtol = 1e-6,
+                      ode_max_steps = 1e7){
+  output_level <- match.arg(output_level)
   ##Merge primigrav and multigrav datasets if necessary.
   if(comparison=='pgmg' | comparison=='pgsg'){
     data_raw_pg <- format_na(data_raw_pg)
@@ -94,9 +258,6 @@ run_pmcmc <- function(data_raw=NULL,
   init_age <- c(0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 3.5, 5, 7.5, 10, 15, 20, 30, 40, 50, 60, 70, 80)
   het_brackets <- 5
   lag_rates <- 10
-  max_steps <- 1e7
-  atol <- 1e-6
-  rtol <- 1e-6
   preyears <- 5 #Length of time in years the deterministic seasonal model should run before Jan 1 of the year observations began
 
   #Create model parameter list. Also loads seasonality profile data file to match to desired admin_unit and country
@@ -151,8 +312,9 @@ run_pmcmc <- function(data_raw=NULL,
                                                proposal_matrix,
                                                transform = user_informed(init_state)) ## Calls transformation function based on pmcmc parameters
    }else if(initial == 'fitted'){
-    log_init_EIR <- mcstate::pmcmc_parameter("log_init_EIR", rnorm(1, mean = 4, sd = 3),
-                                             prior = function(p) dnorm(p, mean = 4, sd = 3, log = TRUE) + p) #Add p to adjust for sampling on log scale
+    log_init_EIR <- mcstate::pmcmc_parameter("log_init_EIR", rnorm(1, mean = log(10), sd = 1),
+                                              min = log(1e-3), max = log(500),
+                                             prior = function(p) dnorm(p, mean = log(10), sd = 1, log = TRUE)) 
     pars = list(log_init_EIR = log_init_EIR, volatility = volatility) ## Put pmcmc parameters into a list
     mcmc_pars <- mcstate::pmcmc_parameters$new(pars,
                                                proposal_matrix,
@@ -161,229 +323,8 @@ run_pmcmc <- function(data_raw=NULL,
 
 
   n_threads <- dust::dust_openmp_threads(n_threads, action = "fix")
-  if(comparison=='u5'){
-    ##Output from particle filter
-    ##    run: output used for likelihood calculation
-    ##    state: output used for visualization
-    index <- function(info) {
-      list(run = c(prev = info$index$prev),
-           state = c(prev_05 = info$index$prev,
-                     prev_flex = info$index$prev_flex,
-                     EIR = info$index$EIR_out,
-                     betaa = info$index$betaa_out,
-                     clininc_all = info$index$inc,
-                     prev_all = info$index$prevall,
-                     clininc_05 = info$index$inc05,
-                     Dout = info$index$Dout,
-                     Aout = info$index$Aout,
-                     Uout = info$index$Uout,
-                     p_det_out = info$index$p_det_out,
-                     phi_out = info$index$phi_out,
-                     b_out = info$index$b_out,
-                     IC_out = info$index$IC_out,
-                     IB_out = info$index$IB_out,
-                     ID_out = info$index$ID_out,
-                     spz_rate = info$index$spz_rate,
-                     eff_moz_pop = info$index$eff_moz_pop,
-                     moz2human_ratio = info$index$moz2human_ratio))
-    }
-    compare_funct <- compare_u5
- } else if(comparison=='pg'){
-    ##Output from particle filter
-    ##    run: output used for likelihood calculation
-    ##    state: output used for visualization
-    index <- function(info) {
-      list(run = c(prev_pg = info$index$prev_preg_pg),
-           state = c(prev_05 = info$index$prev,
-                     prev_pg = info$index$prev_preg_pg,
-                     prev_sg = info$index$prev_preg_sg,
-                     prev_mg = info$index$prev_preg_mg,
-                     EIR = info$index$EIR_out,
-                     betaa = info$index$betaa_out,
-                     clininc_all = info$index$inc,
-                     prev_all = info$index$prevall,
-                     clininc_05 = info$index$inc05,
-                     Dout = info$index$Dout,
-                     Aout = info$index$Aout,
-                     Uout = info$index$Uout,
-                     p_det_out = info$index$p_det_out,
-                     phi_out = info$index$phi_out,
-                     b_out = info$index$b_out,
-                     IC_out = info$index$IC_out,
-                     IB_out = info$index$IB_out,
-                     ID_out = info$index$ID_out,
-                     spz_rate = info$index$spz_rate,
-                     eff_moz_pop = info$index$eff_moz_pop,
-                     moz2human_ratio = info$index$moz2human_ratio))
-    }
-    compare_funct <- compare_pg
-
-  }else if(comparison=='pgmg'){
-    ##Output from particle filter
-    ##    run: output used for likelihood calculation
-    ##    state: output used for visualization
-    index <- function(info) {
-      list(run = c(prev_pg = info$index$prev_preg_pg,
-                   prev_mg = info$index$prev_preg_mg),
-           state = c(prev_05 = info$index$prev,
-                     prev_pg = info$index$prev_preg_pg,
-                     prev_sg = info$index$prev_preg_sg,
-                     prev_mg = info$index$prev_preg_mg,
-                     EIR = info$index$EIR_out,
-                     betaa = info$index$betaa_out,
-                     clininc_all = info$index$inc,
-                     prev_all = info$index$prevall,
-                     clininc_05 = info$index$inc05,
-                     Dout = info$index$Dout,
-                     Aout = info$index$Aout,
-                     Uout = info$index$Uout,
-                     p_det_out = info$index$p_det_out,
-                     phi_out = info$index$phi_out,
-                     b_out = info$index$b_out,
-                     IC_out = info$index$IC_out,
-                     IB_out = info$index$IB_out,
-                     ID_out = info$index$ID_out,
-                     spz_rate = info$index$spz_rate,
-                     eff_moz_pop = info$index$eff_moz_pop,
-                     moz2human_ratio = info$index$moz2human_ratio))
-    }
-    compare_funct <- compare_pgmg
-
-  } else if(comparison=='pgsg'){
-    index <- function(info) {
-      list(run = c(prev_pg = info$index$prev_preg_pg,
-                   prev_mg = info$index$prev_preg_sg),
-           state = c(prev_05 = info$index$prev,
-                     prev_pg = info$index$prev_preg_pg,
-                     prev_mg = info$index$prev_preg_sg,
-                     prev_mg_mg = info$index$prev_preg_mg,
-                     EIR = info$index$EIR_out,
-                     betaa = info$index$betaa_out,
-                     clininc_all = info$index$inc,
-                     prev_all = info$index$prevall,
-                     clininc_05 = info$index$inc05,
-                     Dout = info$index$Dout,
-                     Aout = info$index$Aout,
-                     Uout = info$index$Uout,
-                     p_det_out = info$index$p_det_out,
-                     phi_out = info$index$phi_out,
-                     b_out = info$index$b_out,
-                     IC_out = info$index$IC_out,
-                     IB_out = info$index$IB_out,
-                     ID_out = info$index$ID_out,
-                     spz_rate = info$index$spz_rate,
-                     eff_moz_pop = info$index$eff_moz_pop,
-                     moz2human_ratio = info$index$moz2human_ratio))
-    }
-    compare_funct <- compare_pgmg
-  } else if(comparison=='sg'){
-    index <- function(info) {
-      list(run = c(prev_mg = info$index$prev_preg_sg),
-           state = c(prev_05 = info$index$prev,
-                     prev_pg = info$index$prev_preg_pg,
-                     prev_mg = info$index$prev_preg_sg,
-                     prev_mg_mg = info$index$prev_preg_mg,
-                     EIR = info$index$EIR_out,
-                     betaa = info$index$betaa_out,
-                     clininc_all = info$index$inc,
-                     prev_all = info$index$prevall,
-                     clininc_05 = info$index$inc05,
-                     Dout = info$index$Dout,
-                     Aout = info$index$Aout,
-                     Uout = info$index$Uout,
-                     p_det_out = info$index$p_det_out,
-                     phi_out = info$index$phi_out,
-                     b_out = info$index$b_out,
-                     IC_out = info$index$IC_out,
-                     IB_out = info$index$IB_out,
-                     ID_out = info$index$ID_out,
-                     spz_rate = info$index$spz_rate,
-                     eff_moz_pop = info$index$eff_moz_pop,
-                     moz2human_ratio = info$index$moz2human_ratio))
-    }
-    compare_funct <- compare_mg
-  } else if(comparison=='mg'){
-    index <- function(info) {
-      list(run = c(prev_mg = info$index$prev_preg_mg),
-           state = c(prev_05 = info$index$prev,
-                     prev_pg = info$index$prev_preg_pg,
-                     prev_sg = info$index$prev_preg_sg,
-                     prev_mg = info$index$prev_preg_mg,
-                     EIR = info$index$EIR_out,
-                     betaa = info$index$betaa_out,
-                     clininc_all = info$index$inc,
-                     prev_all = info$index$prevall,
-                     clininc_05 = info$index$inc05,
-                     Dout = info$index$Dout,
-                     Aout = info$index$Aout,
-                     Uout = info$index$Uout,
-                     p_det_out = info$index$p_det_out,
-                     phi_out = info$index$phi_out,
-                     b_out = info$index$b_out,
-                     IC_out = info$index$IC_out,
-                     IB_out = info$index$IB_out,
-                     ID_out = info$index$ID_out,
-                     spz_rate = info$index$spz_rate,
-                     eff_moz_pop = info$index$eff_moz_pop,
-                     moz2human_ratio = info$index$moz2human_ratio))
-    }
-    compare_funct <- compare_mg
-  } else if(comparison=='ancall'){
-    index <- function(info) {
-      list(run = c(prev_anc_all = info$index$prev_preg_all),
-           state = c(prev_05 = info$index$prev,
-                     prev_pg = info$index$prev_preg_pg,
-                     prev_sg = info$index$prev_preg_sg,
-                     prev_mg = info$index$prev_preg_mg,
-                     prev_anc_all = info$index$prev_preg_all,
-                     EIR = info$index$EIR_out,
-                     betaa = info$index$betaa_out,
-                     clininc_all = info$index$inc,
-                     prev_all = info$index$prevall,
-                     clininc_05 = info$index$inc05,
-                     Dout = info$index$Dout,
-                     Aout = info$index$Aout,
-                     Uout = info$index$Uout,
-                     p_det_out = info$index$p_det_out,
-                     phi_out = info$index$phi_out,
-                     b_out = info$index$b_out,
-                     IC_out = info$index$IC_out,
-                     IB_out = info$index$IB_out,
-                     ID_out = info$index$ID_out,
-                     spz_rate = info$index$spz_rate,
-                     eff_moz_pop = info$index$eff_moz_pop,
-                     moz2human_ratio = info$index$moz2human_ratio))
-    }
-    compare_funct <- compare_ancall
-  }else if(grepl("\\d+to\\d+",comparison)){
-    index <- function(info) {
-      list(run = c(prev_flex = info$index$prev_flex),
-           state = c(prev_05 = info$index$prev,
-                     prev_flex = info$index$prev_flex,
-                     prev_pg = info$index$prev_preg_pg,
-                     prev_sg = info$index$prev_preg_sg,
-                     prev_mg = info$index$prev_preg_mg,
-                     prev_anc_all = info$index$prev_preg_all,
-                     EIR = info$index$EIR_out,
-                     betaa = info$index$betaa_out,
-                     clininc_all = info$index$inc,
-                     prev_all = info$index$prevall,
-                     clininc_05 = info$index$inc05,
-                     Dout = info$index$Dout,
-                     Aout = info$index$Aout,
-                     Uout = info$index$Uout,
-                     p_det_out = info$index$p_det_out,
-                     phi_out = info$index$phi_out,
-                     b_out = info$index$b_out,
-                     IC_out = info$index$IC_out,
-                     IB_out = info$index$IB_out,
-                     ID_out = info$index$ID_out,
-                     spz_rate = info$index$spz_rate,
-                     eff_moz_pop = info$index$eff_moz_pop,
-                     moz2human_ratio = info$index$moz2human_ratio))
-    }
-    compare_funct <- compare_flex
-  }
+  index <- make_pmcmc_index(comparison, output_level)
+  compare_funct <- pmcmc_compare_function(comparison)
 
   set.seed(seed) #To reproduce pMCMC results
 
@@ -393,14 +334,14 @@ run_pmcmc <- function(data_raw=NULL,
   pf <- mcstate::particle_filter$new(data, model, n_particles, compare_funct,
                                      index = index, seed = seed,
                                      stochastic_schedule = stochastic_schedule,
-                                     ode_control = dust::dust_ode_control(max_steps = max_steps, atol = atol, rtol = rtol,debug_record_step_times=FALSE),
+                                     ode_control = dust::dust_ode_control(max_steps = ode_max_steps, atol = ode_atol, rtol = ode_rtol,debug_record_step_times=FALSE),
                                      n_threads = n_threads)
 
   ### Set pmcmc control
   control <- mcstate::pmcmc_control(
     n_steps,
-    save_state = TRUE,
-    save_trajectories = TRUE,
+    save_state = save_state,
+    save_trajectories = save_trajectories,
     progress = TRUE,
     n_chains = n_chains,
     n_workers = n_workers,
@@ -417,6 +358,7 @@ run_pmcmc <- function(data_raw=NULL,
   pars <- pmcmc_run$pars
   probs <- pmcmc_run$probabilities
   mcmc <- coda::as.mcmc(cbind(probs, pars))
+  trajectories <- pmcmc_trajectories(pmcmc_run)
 
   ##Save seasonality equilibrium trajectories if checking equilibrium
   seas_pretime <- NULL
@@ -431,9 +373,15 @@ run_pmcmc <- function(data_raw=NULL,
                     mcmc = as.data.frame(mcmc),
                     pars = as.data.frame(pars),
                     probs = as.data.frame(probs),
-                    times = pmcmc_run$trajectories$time,
-                    history = pmcmc_run$trajectories$state,
-                    seas_history = seas_pretime)
+                    times = trajectories$times,
+                    history = trajectories$history,
+                    seas_history = seas_pretime,
+                    output_level = output_level,
+                    save_state = save_state,
+                    save_trajectories = save_trajectories,
+                    ode_control = list(atol = ode_atol,
+                                       rtol = ode_rtol,
+                                       max_steps = ode_max_steps))
 
   return(to_return)
 }

@@ -3,6 +3,8 @@
 #' \code{model_param_list_create} creates list of model parameters to be used
 #' within \code{equilibrium_init_create}
 #'
+#' @importFrom stats median
+#'
 #' @param eta Death rate for exponential population distribution, i.e. 1/Mean Population Age. Default = 0.0001305
 #' @param rho Age-dependent biting parameter. Default = 0.85
 #' @param a0 Age-dependent biting parameter. Default = 2920

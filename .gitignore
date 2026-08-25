@@ -14,3 +14,4 @@ docs
 *.Rcheck/
 check-local/
 anatembea_*.tar.gz
+/fitted_eir_testing.r

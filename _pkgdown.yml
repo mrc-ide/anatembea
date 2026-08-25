@@ -1,4 +1,12 @@
-url: ~
+url: https://mrc-ide.github.io/anatembea/
 template:
   bootstrap: 5
 
+articles:
+- title: Analysis workflow
+  navbar: Analysis workflow
+  contents:
+  - anatembea_intro
+  - preparing-an-analysis
+  - tuning-pmcmc
+  - production-pmcmc

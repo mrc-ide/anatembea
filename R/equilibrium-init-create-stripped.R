@@ -22,6 +22,7 @@
 #'
 #' @importFrom stringi stri_trans_general
 #' @importFrom statmod gauss.quad.prob
+#' @importFrom stats rlnorm
 #'
 #'
 #' @export

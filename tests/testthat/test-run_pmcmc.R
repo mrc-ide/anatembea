@@ -63,3 +63,56 @@ test_that("admin_match returns 0 when no country/admin specified", {
                         admin_units_seasonal = admin_units_seasonal)
   expect_equal(result, 0)
 })
+
+test_that("pmcmc output modes build the expected state indexes", {
+  info <- list(index = as.list(seq_len(24)))
+  names(info$index) <- c(
+    "prev", "prev_flex", "prev_preg_pg", "prev_preg_sg",
+    "prev_preg_mg", "prev_preg_all", "EIR_out", "betaa_out",
+    "inc05", "inc", "prevall", "Dout", "Aout", "Uout",
+    "p_det_out", "phi_out", "b_out", "IC_out", "IB_out", "ID_out",
+    "spz_rate", "eff_moz_pop", "moz2human_ratio", "unused"
+  )
+
+  minimal <- make_pmcmc_index("pgmg", "minimal")(info)
+  standard <- make_pmcmc_index("pgmg", "standard")(info)
+  diagnostic <- make_pmcmc_index("pgmg", "diagnostic")(info)
+
+  expect_named(minimal$run, c("prev_pg", "prev_mg"))
+  expect_named(minimal$state, c("prev_pg", "prev_mg"))
+
+  expect_true(all(c("prev_05", "prev_pg", "prev_sg", "prev_mg",
+                    "EIR", "betaa", "clininc_05") %in%
+                    names(standard$state)))
+  expect_false("Dout" %in% names(standard$state))
+
+  expect_named(diagnostic$state, c(
+    "prev_05", "prev_pg", "prev_sg", "prev_mg", "EIR", "betaa",
+    "clininc_all", "prev_all", "clininc_05", "Dout", "Aout", "Uout",
+    "p_det_out", "phi_out", "b_out", "IC_out", "IB_out", "ID_out",
+    "spz_rate", "eff_moz_pop", "moz2human_ratio"
+  ))
+})
+
+test_that("pmcmc trajectory extraction handles unsaved trajectories", {
+  without_trajectories <- pmcmc_trajectories(list(trajectories = NULL))
+  expect_null(without_trajectories$times)
+  expect_null(without_trajectories$history)
+
+  with_trajectories <- pmcmc_trajectories(list(
+    trajectories = list(time = c(1, 2), state = matrix(1:4, nrow = 2))
+  ))
+  expect_equal(with_trajectories$times, c(1, 2))
+  expect_equal(with_trajectories$history, matrix(1:4, nrow = 2))
+})
+
+test_that("run_pmcmc preserves the historical full-output defaults", {
+  defaults <- formals(run_pmcmc)
+
+  expect_identical(defaults$save_state, TRUE)
+  expect_identical(defaults$save_trajectories, TRUE)
+  expect_identical(
+    eval(defaults$output_level),
+    c("diagnostic", "standard", "minimal")
+  )
+})

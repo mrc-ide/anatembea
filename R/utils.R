@@ -7,6 +7,7 @@
 #'
 #' @param name the name of a file within the inst/extdata folder.
 #'
+#' @importFrom stats coef dbinom
 #' @importFrom utils read.csv
 #'
 #' @export
