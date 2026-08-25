@@ -10,8 +10,8 @@ dynamics, providing the basis for simulating data-informed hypothetical
 scenarios to evaluate the likely impact of alternative intervention
 approaches.
 
-For more information and detail please see our pre-print:
-<https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5184997>
+For more information, see the published article in *The Lancet Microbe*:
+<https://www.sciencedirect.com/science/article/pii/S2666524726000704>
 
 ## Installation
 
@@ -27,10 +27,9 @@ library(anatembea)
 
 ## Reproducibility for accepted ANC pMCMC manuscript
 
-This package version has been frozen to preserve the exact state used in
-the accepted manuscript, published in **The Lancet Microbe**. The
-accepted manuscript is available from the Spiral Digital Repository:
-<https://hdl.handle.net/10044/1/128591>
+The current package continues to develop beyond the published analysis.
+The exact package state used for that work remains preserved at the
+`v1.0-paper` tag.
 
 The analyses were run with R 4.4 using this frozen package state. To
 install the paper version, use:
@@ -48,8 +47,6 @@ Key package versions used in the manuscript workflow included:
 
 Analysis scripts and workflow are available at:
 <https://github.com/jt-hicks/anc_pmcmc_pub>
-
-(Full citation will be added once the article is published online.)
 
 ## Usage
 

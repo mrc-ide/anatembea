@@ -1,4 +1,4 @@
-# Return an initial EIR based on a user-given target prevalence in \<5 yead old children
+# Return an initial EIR based on a user-given target prevalence in \<5 year old children
 
 `get_init_EIR` Return an initial EIR based on a user-given target
 prevalence in \<5 year old children

@@ -31,7 +31,13 @@ run_pmcmc(
   start_pf_time = 30 * 12,
   particle_tune = FALSE,
   comparison = "u5",
-  initial = "informed"
+  initial = "informed",
+  save_state = TRUE,
+  save_trajectories = TRUE,
+  output_level = c("diagnostic", "standard", "minimal"),
+  ode_atol = 1e-06,
+  ode_rtol = 1e-06,
+  ode_max_steps = 1e+07
 )
 ```
 
@@ -155,3 +161,39 @@ run_pmcmc(
 
   Is the initial equilibrium state informed by the user
   ('user-informed') or by the observed data ('fitted')?
+
+- save_state:
+
+  Control whether the underlying `mcstate` pMCMC run retains model state
+  values during execution. The raw `mcstate` object is not returned by
+  `run_pmcmc()`. Defaults to `TRUE` to preserve the pre-1.1 execution
+  behaviour.
+
+- save_trajectories:
+
+  Save particle-filter trajectories. Set to `TRUE` when downstream
+  summaries or plots need `history` and `times`. Defaults to `TRUE` to
+  preserve the pre-1.1 output behaviour.
+
+- output_level:
+
+  Amount of model output to retain in the particle-filter state index.
+  `"minimal"` keeps only likelihood inputs, `"standard"` keeps key
+  fitted prevalence, EIR, betaa, and under-5 incidence outputs, and
+  `"diagnostic"` preserves the previous full state index and is the
+  default for backward compatibility.
+
+- ode_atol:
+
+  Absolute tolerance passed to
+  [`dust::dust_ode_control()`](https://rdrr.io/pkg/dust/man/dust_ode_control.html).
+
+- ode_rtol:
+
+  Relative tolerance passed to
+  [`dust::dust_ode_control()`](https://rdrr.io/pkg/dust/man/dust_ode_control.html).
+
+- ode_max_steps:
+
+  Maximum ODE steps passed to
+  [`dust::dust_ode_control()`](https://rdrr.io/pkg/dust/man/dust_ode_control.html).

@@ -205,14 +205,14 @@ result <- anatembea::run_pmcmc(data_raw=tanga_data_slim,
 #> ** using staged installation
 #> ** libs
 #> using C compiler: ‘gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0’
-#> gcc -std=gnu2x -I"/opt/R/4.6.0/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c odin.c -o odin.o
+#> gcc -std=gnu2x -I"/opt/R/4.6.1/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c odin.c -o odin.o
 #> odin.c: In function ‘odin_model_stripped_seasonal_initial_conditions’:
 #> odin.c:2309:10: warning: unused variable ‘t’ [-Wunused-variable]
 #>  2309 |   double t = scalar_real(t_ptr, "t");
 #>       |          ^
-#> gcc -std=gnu2x -I"/opt/R/4.6.0/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o
-#> gcc -std=gnu2x -shared -L/opt/R/4.6.0/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal12e978e6.so odin.o registration.o -L/opt/R/4.6.0/lib/R/lib -lR
-#> installing to /tmp/RtmpII5WsC/devtools_install_1c0355461132/00LOCK-file1c0377e4f5e7/00new/odin.model.stripped.seasonal12e978e6/libs
+#> gcc -std=gnu2x -I"/opt/R/4.6.1/lib/R/include" -DNDEBUG   -I/usr/local/include    -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -fdiagnostics-color=always -c registration.c -o registration.o
+#> gcc -std=gnu2x -shared -L/opt/R/4.6.1/lib/R/lib -L/usr/local/lib -o odin.model.stripped.seasonal12e978e6.so odin.o registration.o -L/opt/R/4.6.1/lib/R/lib -lR
+#> installing to /tmp/Rtmp4JurZE/devtools_install_1e8c30bd31a2/00LOCK-file1e8c366d9c2a/00new/odin.model.stripped.seasonal12e978e6/libs
 #> ** checking absolute paths in shared objects and dynamic libraries
 #> * DONE (odin.model.stripped.seasonal12e978e6)
 #> Unused equation: age_flex_length

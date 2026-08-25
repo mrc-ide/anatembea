@@ -82,7 +82,7 @@ model_param_list_create(
 
 - eta:
 
-  Death rate for expoential population distribtuion, i.e. 1/Mean
+  Death rate for exponential population distribution, i.e. 1/Mean
   Population Age. Default = 0.0001305
 
 - rho:
